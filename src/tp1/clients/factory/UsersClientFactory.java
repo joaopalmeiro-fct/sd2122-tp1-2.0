@@ -1,17 +1,34 @@
 package tp1.clients.factory;
 
+import java.net.URI;
+
+import tp1.api.clients.RestClient;
+import tp1.api.clients.UsersClient;
 import tp1.api.service.util.Users;
+import tp1.clients.rest.RestUsersClient;
+import tp1.clients.soap.SoapUsersClient;
 
 public class UsersClientFactory {
-
-	public static Users getClient() {
-		
-	       var serverURI = ; // use discovery to find a uri of the Users service;
-	       
-	       if( serverURI.endsWith("rest")
-	          return new RestUsersClient( serverURI );
-	       else
-	          return new SoapUsersClient( serverURI );
-	    }
 	
+	RestUsersClient restUsersClient;
+	SoapUsersClient soapUsersClient;
+	
+	public UsersClientFactory () {
+		restUsersClient = new RestUsersClient();
+		soapUsersClient = new SoapUsersClient();
+	}
+
+	public UsersClient getClient(URI uri) {
+
+		//var serverURI = ; // use discovery to find a uri of the Users service;
+
+		if (uri.toString().endsWith("rest")) {
+			restUsersClient.redifineURI(uri);
+			return restUsersClient;
+		}
+		else{
+			return soapUsersClient;
+		}
+	}
+
 }

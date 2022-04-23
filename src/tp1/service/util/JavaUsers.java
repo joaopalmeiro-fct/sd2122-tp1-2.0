@@ -27,7 +27,7 @@ public class JavaUsers implements Users {
 		this.discovery = discovery;
 		users = new HashMap<>();
 		
-		discoveryClient = new DirectoryClient();
+		directoryClient = new DirectoryClient();
 	}
 	
 	@Override
