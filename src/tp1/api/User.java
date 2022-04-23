@@ -30,6 +30,20 @@ public class User {
 		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
 		return result;
 	}
+	
+	public void update (User user) {
+		String email = user.getEmail();
+		if (email != null)
+			this.email = email;
+		
+		String fullName = user.getFullName();
+		if (fullName != null)
+			this.fullName = fullName;
+		
+		String password = user.getPassword();
+		if (password != null)
+			this.password = password;
+	}
 
 	@Override
 	public boolean equals(Object obj) {

@@ -21,7 +21,7 @@ public interface Result<T> {
 	 * NOT_FOUND - an access occurred to something that does not exist
 	 * INTERNAL_ERROR - something unexpected happened
 	 */
-	enum ErrorCode{ OK, CONFLICT, NOT_FOUND, BAD_REQUEST, FORBIDDEN, INTERNAL_ERROR, NOT_IMPLEMENTED };
+	enum ErrorCode{ OK, NO_CONTENT, CONFLICT, NOT_FOUND, BAD_REQUEST, FORBIDDEN, INTERNAL_ERROR, NOT_IMPLEMENTED };
 	
 	/**
 	 * Tests if the result is an error.
@@ -58,7 +58,7 @@ public interface Result<T> {
 	static <T> OkResult<T> ok() {
 		return new OkResult<>(null);	
 	}
-	
+
 	/**
 	 * Convenience method used to return an error 
 	 * @return

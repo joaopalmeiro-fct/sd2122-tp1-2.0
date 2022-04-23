@@ -2,6 +2,10 @@ package tp1.api.service.util;
 
 import java.util.List;
 
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.QueryParam;
 import tp1.api.User;
 
 public interface Users {
@@ -61,4 +65,22 @@ public interface Users {
 	 *         400 otherwise.
 	 */
 	Result<List<User>> searchUsers(String pattern);
+	
+	/**
+	 * Authenticates the user with the given id.
+	 * @param userId the userId of the user
+	 * @param password password of the user
+	 * @return 204 if the user exists and the password matches
+	 *         403 if the password is incorrect
+	 *         404 if no user exists with the provided userId
+	 */
+	Result<Void> authenticateUser(String userId, String password);
+	
+	/**
+	 * Check the existence of the user with the given id.
+	 * @param userId the userId of the user
+	 * @return 204 if the user exists
+	 *         404 if no user exists with the provided userId
+	 */
+	Result<Void> checkUserExistence(String userId);
 }

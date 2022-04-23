@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response.ErrorCode;
 import tp1.api.User;
 import tp1.api.service.util.Result;
 import tp1.api.service.util.Result.ErrorCode;
@@ -16,38 +15,6 @@ import tp1.api.service.util.Users;
 import tp1.server.DirectoriesServer;
 
 public class JavaUsers implements Users {
-
-	/*
-	@Override
-	public Result<String> createUser(User user) {
-		
-		return null;
-	}
-
-	@Override
-	public Result<User> getUser(String userId, String password) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Result<User> updateUser(String userId, String password, User user) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Result<User> deleteUser(String userId, String password) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Result<List<User>> searchUsers(String pattern) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	*/
 	
 	private final Map<String,User> users = new HashMap<>();
 	
@@ -112,34 +79,26 @@ public class JavaUsers implements Users {
 			retUser = users.get(userId);
 
 			// Check if user exists 
-			if( retUser == null ) {
-				Log.info("User does not exist.");
+			if( retUser == null )
 				return Result.error( ErrorCode.NOT_FOUND );
-			}
 
 			//Check if the password is correct
-			if( !retUser.getPassword().equals(password)) {
-				Log.info("Password is incorrect.");
+			if( !retUser.getPassword().equals(password))
 				return Result.error( ErrorCode.FORBIDDEN );
-			}
 
 			retUser.update(user);
 
-			//retUser = users.put(userId, storedUser);
 		}
 
-		return retUser;
+		return Result.ok(retUser);
 	}
 
 
 	@Override
-	public User deleteUser(String userId, String password) {
-		Log.info("deleteUser : user = " + userId + "; pwd = " + password);
+	public Result<User> deleteUser(String userId, String password) {
 
-		if(userId == null) {
-			Log.info("UserId null.");
+		if(userId == null) 
 			return Result.error( ErrorCode.BAD_REQUEST );
-		}
 
 		User storedUser;
 
@@ -148,34 +107,27 @@ public class JavaUsers implements Users {
 			storedUser = users.get(userId);
 
 			// Check if user exists 
-			if( storedUser == null ) {
-				System.out.println("User does not exist.");
+			if( storedUser == null )
 				return Result.error( ErrorCode.NOT_FOUND );
-			}
 
 			//Check if the password is correct
-			if( password == null || !storedUser.getPassword().equals(password)) {
-				Log.info("Password is incorrect.");
+			if( password == null || !storedUser.getPassword().equals(password))
 				return Result.error( ErrorCode.FORBIDDEN );
-			}
 
 			deleteFiles(userId, password);
 			users.remove(userId);
 
 		}
 
-		return storedUser;
+		return Result.ok(storedUser);
 	}
 
 
 	@Override
-	public List<User> searchUsers(String pattern) {
-		Log.info("searchUsers : pattern = " + pattern);
+	public Result<List<User>> searchUsers(String pattern) {
 
-		if(pattern == null) {
-			Log.info("Pattern null. Use empty string for all results");
+		if(pattern == null)
 			return Result.error( ErrorCode.BAD_REQUEST );
-		}
 
 		List<User> retUsers = new ArrayList<User>();
 		Collection<User> allUsers;
@@ -192,21 +144,18 @@ public class JavaUsers implements Users {
 
 		}
 
-		return retUsers;
+		return Result.ok(retUsers);
 	}
 
 //------------------------------- Util methods (for other services) ---------------------------------
 
 	@Override
-	public void authenticateUser (String userId, String password) {
-		Log.info("authenticateUser : user = " + userId + "; pwd = " + password);
+	public Result<Void> authenticateUser (String userId, String password) {
 
 		// Check if user is valid
 		//if(userId == null || password == null) {
-		if(userId == null) {
-			Log.info("UserId null.");
+		if(userId == null) 
 			return Result.error( ErrorCode.BAD_REQUEST );
-		}
 
 		User user;
 
@@ -215,25 +164,22 @@ public class JavaUsers implements Users {
 		}
 
 		// Check if user exists 
-		if( user == null ) {
-			Log.info("User does not exist.");
+		if( user == null ) 
 			return Result.error( ErrorCode.NOT_FOUND );
-		}
 
 		//Check if the password is correct
-		if( password == null || !user.getPassword().equals( password)) {
-			Log.info("Password is incorrect.");
+		if( password == null || !user.getPassword().equals( password))
 			return Result.error( ErrorCode.FORBIDDEN );
-		}
+		
+		return Result.error( ErrorCode.NO_CONTENT );
+		
 	}
 
 	@Override
-	public void checkUserExistence (String userId) {
+	public Result<Void> checkUserExistence (String userId) {
 
-		if(userId == null) {
-			Log.info("UserId null.");
+		if(userId == null)
 			return Result.error( ErrorCode.BAD_REQUEST );
-		}
 
 		User user;
 
@@ -241,10 +187,10 @@ public class JavaUsers implements Users {
 			user = users.get(userId);
 		}
 
-		if( user == null ) {
-			Log.info("User does not exist.");
+		if( user == null )
 			return Result.error( ErrorCode.NOT_FOUND );
-		}
+		
+		return Result.error( ErrorCode.NO_CONTENT );
 
 	}
 
@@ -260,10 +206,12 @@ public class JavaUsers implements Users {
 		}
 		
 		int result;
+		
 		synchronized(directoriesClient) {
 			directoriesClient.redifineURI(uri);
 			result = directoriesClient.deleteFiles(userId, password).getErrorCode();
 		}
+		
 		if (result != ErrorCode.NO_CONTENT.getErrorCodeCode()) 
 			return Result.error(result);
 
@@ -271,5 +219,3 @@ public class JavaUsers implements Users {
 
 }
 
-
-}
