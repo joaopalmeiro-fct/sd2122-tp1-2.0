@@ -9,6 +9,7 @@ import java.util.Map;
 
 import jakarta.ws.rs.WebApplicationException;
 import tp1.api.User;
+import tp1.api.clients.DirectoryClient;
 import tp1.api.service.util.Result;
 import tp1.api.service.util.Result.ErrorCode;
 import tp1.api.service.util.Users;
@@ -20,13 +21,13 @@ public class JavaUsers implements Users {
 	Discovery discovery;
 	private final Map<String,User> users;
 	
-	private final DirectoryClient discoveryClient;
+	private final DirectoryClient directoryClient;
 	
 	public JavaUsers (Discovery discovery) {
 		this.discovery = discovery;
 		users = new HashMap<>();
 		
-		discoveryClient = new DiscoveryClient();
+		discoveryClient = new DirectoryClient();
 	}
 	
 	@Override

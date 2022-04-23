@@ -14,7 +14,9 @@ import jakarta.ws.rs.core.MediaType;
 @Path(RestFiles.PATH)
 public interface RestFiles {
 
-	static final String PATH="/files";
+	static final String PATH = "/files";
+	static final String TOKEN = "token";
+	static final String DELETEALL_PATH = "deleteall/";
 
 	/**
 	 * Write a file. If the file exists, overwrites the contents.
@@ -67,6 +69,20 @@ public interface RestFiles {
 	@Path("/{fileId}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	byte[] getFile(@PathParam("fileId") String fileId, 
+			@QueryParam("token") @DefaultValue("") String token);
+	
+	/**
+	 * Delete all existing files from given user.
+	 * 
+	 * @param userId - unique id of the user whose files will be deleted. 
+	 * 
+	 * @return 204 if success (even if user has no files here); 
+	 * 		   400 otherwise.
+	 */
+	@DELETE
+	@Path("/" + DELETEALL_PATH + "{userId}")
+	@Produces(MediaType.TEXT_PLAIN)
+	Integer deleteAllFiles(@PathParam("userId") String userId, 
 			@QueryParam("token") @DefaultValue("") String token);
 
 }

@@ -34,8 +34,8 @@ public class JavaDirectory implements Directory {
 
 	private int rediscovery_counter;
 
-	private final FilesClient filesClient;
-	private final UsersClient usersClient;
+	private final RestFilesClient filesClient;
+	private final RestUsersClient usersClient;
 
 	private final Discovery discovery;
 
@@ -46,8 +46,8 @@ public class JavaDirectory implements Directory {
 		fileDistribution = new HashMap<>();
 		rediscovery_counter = 0;
 		
-		filesClient = new FilesClient();
-		usersClient = new UsersClient();
+		filesClient = new RestFilesClient();
+		usersClient = new RestUsersClient();
 	}
 
 	@Override

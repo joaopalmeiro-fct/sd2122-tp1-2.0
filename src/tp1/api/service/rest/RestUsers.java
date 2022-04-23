@@ -18,6 +18,12 @@ import tp1.api.User;
 public interface RestUsers {
 
 	static final String PATH="/users";
+	static final String QUERY = "query";
+	static final String USER_ID = "userId";
+	static final String PASSWORD = "password";
+	
+	static final String AUTHENTICATE_PATH = "authenticate/";
+	static final String EXISTENCE_PATH = "exists/";
 
 	/**
 	 * Creates a new user.
@@ -93,4 +99,28 @@ public interface RestUsers {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	List<User> searchUsers(@QueryParam("query") String pattern);
+	
+	/**
+	 * Authenticates the user with the given id.
+	 * 
+	 * @param userId the userId of the user
+	 * @param password password of the user
+	 * @return 204 if the user exists and the password matches
+	 *         403 if the password is incorrect
+	 *         404 if no user exists with the provided userId
+	 */
+	@GET
+	@Path("/" + AUTHENTICATE_PATH + "{" + USER_ID + "}")
+	void authenticateUser(@PathParam(USER_ID) String userId, @QueryParam(PASSWORD) String password);
+	
+	/**
+	 * Check the existence of the user with the given id.
+	 * 
+	 * @param userId the userId of the user
+	 * @return 204 if the user exists
+	 *         404 if no user exists with the provided userId
+	 */
+	@GET
+	@Path("/" + EXISTENCE_PATH + "{" + USER_ID + "}")
+	void checkUserExistence(@PathParam(USER_ID) String userId);
 }

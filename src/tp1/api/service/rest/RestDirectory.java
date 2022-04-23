@@ -16,7 +16,8 @@ import tp1.api.FileInfo;
 @Path(RestDirectory.PATH)
 public interface RestDirectory {
 
-	static final String PATH="/dir";
+	static final String PATH = "/dir";
+	static final String DELETEALL_PATH = "deleteall/";
 
 	/**
 	 * Write a new version of a file. If the file exists, its contents are overwritten.
@@ -145,6 +146,18 @@ public interface RestDirectory {
 	List<FileInfo> lsFile(@PathParam("userId") String userId, 
 			@QueryParam("password") String password);
 
+	/**
+	 * Deletes all files of the given user, removes it from any sharings and deletes all info associated with it.
+	 * @param userId - id of the user.
+	 * @param password - the password of the user.
+	 * @return 204 if success (regardless of having any files). 
+	 *		   404 if the userId does not exist.
+	 *         403 if the password is incorrect.
+	 * 		   400 otherwise.
+	 */
+	@DELETE
+	@Path("/" + DELETEALL_PATH + "{userId}")
+	void deleteAllFiles(@PathParam("userId") String userId, @QueryParam("password") String password);
 
 
 }
