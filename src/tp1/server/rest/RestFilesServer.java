@@ -15,9 +15,9 @@ import tp1.server.util.GenericExceptionMapper;
 import tp1.service.rest.FilesResource;
 import tp1.util.Debug;
 
-public class FilesServer {
+public class RestFilesServer {
 
-	private static Logger Log = Logger.getLogger(FilesServer.class.getName());
+	private static Logger Log = Logger.getLogger(RestFilesServer.class.getName());
 	// private static Discovery discovery = null;
 
 	static {

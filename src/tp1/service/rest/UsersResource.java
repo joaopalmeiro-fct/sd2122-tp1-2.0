@@ -77,6 +77,7 @@ public class UsersResource implements RestUsers {
 
 	@Override
 	public void authenticateUser(String userId, String password) {
+		
 		var result = userImpl.authenticateUser(userId, password);
 		
         if( result.isOK() )
@@ -88,6 +89,7 @@ public class UsersResource implements RestUsers {
 
 	@Override
 	public void checkUserExistence(String userId) {
+		
 		var result = userImpl.checkUserExistence(userId);
 		
         if( result.isOK() )
