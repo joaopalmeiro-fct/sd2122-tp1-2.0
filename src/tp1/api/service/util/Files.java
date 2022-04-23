@@ -1,5 +1,12 @@
 package tp1.api.service.util;
 
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
 
 public interface Files {
 
@@ -44,4 +51,14 @@ public interface Files {
 	 */
 	Result<byte[]> getFile(String fileId, String token);
 
+	/**
+	 * Delete all existing files from given user.
+	 * 
+	 * @param userId - unique id of the user whose files will be deleted. 
+	 * 
+	 * @return OK if success (even if user has no files here); 
+	 * 		   BAD_REQUEST otherwise.
+	 */
+	
+	Result<Integer> deleteAllFiles(String userId, String token);
 }

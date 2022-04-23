@@ -4,18 +4,46 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+import java.util.logging.StreamHandler;
 
 import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response.Status;
 import tp1.api.service.util.Files;
 import tp1.api.service.util.Result;
+import tp1.api.service.util.Result.ErrorCode;
+import tp1.discovery.Discovery;
+import tp1.server.resources.FilesResource;
+i
 
 public class JavaFiles implements Files {
+	
+	
+	private static final String FILEPATH = ".\\files\\";
+	private static final String FILEIDSPLIT = "-";
+	//private static Logger Log = Logger.getLogger(JavaFiles.class.getName());
 
-	@Override
+	//map that associates the fileId with the file itself
+	private final Map<String, File> fileData = new HashMap<String, File>();
+
+	// private static Logger Log = Logger.getLogger(FilesResource.class.getName());
+
+	// Nao necessario por enquanto, sera necessario quando fizer uso do token
+	private Discovery discovery;
+
+	public JavaFiles(Discovery discovery) {
+		this.discovery = discovery;
+		//Log.setLevel(Level.ALL);
+		//Log.addHandler(new StreamHandler(System.out, new SimpleFormatter()));
+	}
+
+	/*@Override
 	public Result<Void> writeFile(String fileId, byte[] data, String token) {
 		
 		return null;
@@ -31,10 +59,10 @@ public class JavaFiles implements Files {
 	public Result<byte[]> getFile(String fileId, String token) {
 		
 		return null;
-	}
+	}*/
 	
 	@Override
-	public void writeFile(String fileId, byte[] data, String token) {
+	public Result<Void> writeFile(String fileId, byte[] data, String token) {
 
 		try {
 
@@ -49,15 +77,16 @@ public class JavaFiles implements Files {
 			synchronized (fileData) {
 				fileData.put(fileId, file);
 			}
+			return Result.ok();
 
 		} catch (IOException e) {
-			throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
+			return Result.error(ErrorCode.INTERNAL_ERROR);
 		}
 
 	}
 
 	@Override
-	public void deleteFile(String fileId, String token) {
+	public Result<Void> deleteFile(String fileId, String token) {
 
 		try {
 
@@ -66,15 +95,16 @@ public class JavaFiles implements Files {
 				file.delete();
 				fileData.remove(fileId);
 			}
+			return Result.ok();
 
 		} catch (Exception e) {
-			throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
+			return Result.error(ErrorCode.INTERNAL_ERROR);
 		}
 
 	}
 
 	@Override
-	public byte[] getFile(String fileId, String token) {
+	public Result<byte[]> getFile(String fileId, String token) {
 
 		File file;
 		synchronized (fileData) {
@@ -82,7 +112,7 @@ public class JavaFiles implements Files {
 			file = fileData.get(fileId);
 
 			if (file == null)
-				throw new WebApplicationException(Status.NOT_FOUND);
+				return Result.error(ErrorCode.NOT_FOUND);
 
 			try {
 				// File file = fileData.get(FILEPATH + fileId);
@@ -93,20 +123,20 @@ public class JavaFiles implements Files {
 					stream.close();
 				}
 
-				return fileContent;
+				return Result.ok(fileContent);
 
 			} catch (IOException e) {
-				throw new WebApplicationException(e,Status.INTERNAL_SERVER_ERROR);
+				return Result.error(ErrorCode.INTERNAL_ERROR);
 			}
 		}
 
 	}
 
 	@Override
-	public Integer deleteAllFiles(String userId, String token) {
+	public Result<Integer> deleteAllFiles(String userId, String token) {
 
 		if (userId == null)
-			throw new WebApplicationException(Status.BAD_REQUEST);
+			return Result.error(ErrorCode.BAD_REQUEST);
 
 		Set<String> filesToDelete = new HashSet<>();
 		int count = 0;
@@ -131,7 +161,7 @@ public class JavaFiles implements Files {
 				count++;
 			} 
 		}
-		return count;
+		return Result.ok(count);
 
 	}
 
