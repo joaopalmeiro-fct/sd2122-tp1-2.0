@@ -9,18 +9,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
-import java.util.logging.Level;
+/*import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-import java.util.logging.StreamHandler;
+import java.util.logging.StreamHandler;*/
 
-import jakarta.ws.rs.WebApplicationException;
 import tp1.api.service.util.Files;
 import tp1.api.service.util.Result;
 import tp1.api.service.util.Result.ErrorCode;
 import tp1.discovery.Discovery;
-import tp1.server.resources.FilesResource;
-i
 
 public class JavaFiles implements Files {
 	

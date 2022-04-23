@@ -1,5 +1,4 @@
 package tp1.service.util;
-package tp1.service.util;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ import tp1.api.service.util.Directory;
 import tp1.api.service.util.Result;
 import tp1.api.service.util.Result.ErrorCode;
 import tp1.api.service.util.Users;
+import tp1.discovery.Discovery;
 
 public class JavaDirectory implements Directory {
 	private static final String FORWARD_SLASH = "/";
