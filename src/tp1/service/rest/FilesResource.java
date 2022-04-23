@@ -31,4 +31,10 @@ public class FilesResource implements RestFiles {
 		return null;
 	}
 
+	@Override
+	public Integer deleteAllFiles(String userId, String token) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

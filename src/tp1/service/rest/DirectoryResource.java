@@ -52,4 +52,10 @@ public class DirectoryResource implements RestDirectory{
 		return null;
 	}
 
+	@Override
+	public void deleteAllFiles(String userId, String password) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

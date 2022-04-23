@@ -7,10 +7,14 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
+import tp1.api.clients.FilesClient;
 import tp1.api.clients.RestClient;
 import tp1.api.service.rest.RestFiles;
+import tp1.api.service.util.Result;
+import tp1.api.service.util.Result.ErrorCode;
 
-public class RestFilesClient extends RestClient {
+public class RestFilesClient extends RestClient implements FilesClient {
 	WebTarget target;
 
 	public RestFilesClient(URI serverURI) {
@@ -33,25 +37,29 @@ public class RestFilesClient extends RestClient {
 		System.setProperty("java.net.preferIPv4Stack", "true");
 	}
 
-	public Response writeFile(byte[] data, String fileId) {
+	@Override
+	public Result<Void> writeFile(String fileId, byte[] data, String token) {
 		return super.reTry(() -> {
 			return clt_writeFile(data, fileId);
 		});
 	}
 
-	public byte[] getFile(String fileId) {
+	@Override
+	public Result<byte[]> getFile(String fileId, String token) {
 		return super.reTry(() -> {
 			return clt_getFile(fileId);
 		});
 	}
 
-	public Response deleteFile(String fileId) {
+	@Override
+	public Result<Void> deleteFile(String fileId, String token) {
 		return super.reTry(() -> {
 			return clt_deleteFile(fileId);
 		});
 	}
 
-	public Response deleteAllFiles(String userId) {
+	@Override
+	public Result<Integer> deleteAllFiles(String userId, String token) {
 		return super.reTry(() -> {
 			return clt_deleteAllFiles(userId);
 		});
@@ -59,41 +67,61 @@ public class RestFilesClient extends RestClient {
 
 	// -------------------------------------------------------------------------------------------
 
-	private Response clt_writeFile(byte[] data, String fileId) {
+	private Result<Void> clt_writeFile(byte[] data, String fileId) {
 
 		Response r = target.path(fileId)
 				// .queryParam(uma token)
 				.request().post(Entity.entity(data, MediaType.APPLICATION_OCTET_STREAM));
-
-		return r;
+		
+		int status = r.getStatus();
+		if (status == Status.NO_CONTENT.getStatusCode())
+			return Result.ok();
+		else
+			return Result.error(ErrorCode.valueOf((Status.fromStatusCode(status).toString())));
+		
 	}
 
-	private byte[] clt_getFile(String fileId) {
+	private Result<byte[]> clt_getFile(String fileId) {
 
 		Response r = target.path(fileId)
 				// .queryParam(uma token)
 				.request().get();
+		
+		int status = r.getStatus();
+		if (status == Status.OK.getStatusCode() && r.hasEntity())
+			return Result.ok(r.readEntity(byte[].class));
+		else
+			return Result.error(ErrorCode.valueOf((Status.fromStatusCode(status).toString())));
 
-		return r.readEntity(byte[].class);
 	}
 
-	private Response clt_deleteFile(String fileId) {
+	private Result<Void> clt_deleteFile(String fileId) {
 
 		Response r = target.path(fileId)
 				// .queryParam(uma token)
 				.request().delete();
+		
+		int status = r.getStatus();
+		if (status == Status.NO_CONTENT.getStatusCode())
+			return Result.ok();
+		else
+			return Result.error(ErrorCode.valueOf((Status.fromStatusCode(status).toString())));
 
-		return r;
 	}
 
-	private Response clt_deleteAllFiles(String userId) {
+	private Result<Integer> clt_deleteAllFiles(String userId) {
 
 		Response r = target.path(RestFiles.DELETEALL_PATH + userId)
 				// .queryParam(uma token)
 				.request()
 				.accept(MediaType.TEXT_PLAIN).delete();
 		
-		return r;
+		int status = r.getStatus();
+		if (status == Status.OK.getStatusCode() && r.hasEntity())
+			return Result.ok(r.readEntity(Integer.class));
+		else
+			return Result.error(ErrorCode.valueOf((Status.fromStatusCode(status).toString())));
+		
 	}
 
 }

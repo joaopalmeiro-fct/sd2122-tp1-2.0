@@ -1,5 +1,6 @@
 package tp1.service.util;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,13 +11,21 @@ import java.util.Set;
 
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import tp1.api.FileInfo;
 import tp1.api.User;
+import tp1.api.clients.FilesClient;
+import tp1.api.clients.UsersClient;
 import tp1.api.service.util.Directory;
 import tp1.api.service.util.Result;
 import tp1.api.service.util.Result.ErrorCode;
 import tp1.api.service.util.Users;
+import tp1.clients.factory.FilesClientFactory;
+import tp1.clients.factory.UsersClientFactory;
 import tp1.discovery.Discovery;
+import tp1.discovery.util.exceptions.NoUrisFoundException;
+import tp1.server.util.ServiceName;
+import tp1.util.EntrySort;
 
 public class JavaDirectory implements Directory {
 	private static final String FORWARD_SLASH = "/";
@@ -34,8 +43,10 @@ public class JavaDirectory implements Directory {
 
 	private int rediscovery_counter;
 
-	private final RestFilesClient filesClient;
-	private final RestUsersClient usersClient;
+	private UsersClientFactory usersClientFactory;
+	private FilesClientFactory filesClientFactory;
+	/*private final RestFilesClient filesClient;
+	private final RestUsersClient usersClient;*/
 
 	private final Discovery discovery;
 
@@ -46,8 +57,17 @@ public class JavaDirectory implements Directory {
 		fileDistribution = new HashMap<>();
 		rediscovery_counter = 0;
 		
-		filesClient = new RestFilesClient();
-		usersClient = new RestUsersClient();
+		/*filesClient = new RestFilesClient();
+		usersClient = new RestUsersClient();*/
+		
+		try {
+			usersClientFactory = new UsersClientFactory();
+			filesClientFactory = new FilesClientFactory();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	@Override
@@ -55,9 +75,10 @@ public class JavaDirectory implements Directory {
 
 		if (filename == null || data == null || userId == null)
 			return Result.error( ErrorCode.BAD_REQUEST );
-
-		authenticateUser(userId, password);
-
+		
+		Result<Void> condition = authenticateUser(userId, password);
+		if (!condition.isOK())
+			return Result.error(condition.error());
 
 		boolean existed = false;
 		String fileId = String.format(FILE_ID, userId, filename);
@@ -82,9 +103,13 @@ public class JavaDirectory implements Directory {
 				} else
 					existed = true;
 
-				URI uri = sendToFiles(data, fileId);
+				Result<URI> result = sendToFiles(data, fileId);
+				if (!result.isOK())
+					return Result.error(result.error());
+				
+				URI uri = result.value();
 				file.setFileURL(
-						uri.toURL().toString().concat(FORWARD_SLASH + FilesServer.SERVICE + FORWARD_SLASH + fileId));
+						uri.toURL().toString().concat(FORWARD_SLASH + ServiceName.FILES.toString() + FORWARD_SLASH + fileId));
 
 				return Result.ok(file);
 
@@ -104,7 +129,9 @@ public class JavaDirectory implements Directory {
 			// Log.info ()... ?
 			return Result.error(ErrorCode.BAD_REQUEST);
 
-		authenticateUser(userId, password);
+		Result<Void> condition = authenticateUser(userId, password);
+		if (!condition.isOK())
+			return condition;
 
 		String fileId = String.format(FILE_ID, userId, filename);
 
@@ -124,7 +151,7 @@ public class JavaDirectory implements Directory {
 
 			try {
 				synchronized (userSharedWithFiles) {
-					URI uri = new URI(file.getFileURL().split(FORWARD_SLASH + FilesServer.SERVICE)[0]);
+					URI uri = new URI(file.getFileURL().split(FORWARD_SLASH + ServiceName.FILES.toString())[0]);
 					deleteFromFiles(fileId, uri);
 					for (String u : file.getSharedWith()) {
 						userSharedWithFiles.get(u).remove(fileId);
@@ -145,7 +172,9 @@ public class JavaDirectory implements Directory {
 
 		String fileId = String.format(FILE_ID, userId, filename);
 
-		checkShareConditions(userId, filename, userIdShare, password, fileId);
+		Result<Void> condition = checkShareConditions(userId, filename, userIdShare, password, fileId);
+		if (!condition.isOK())
+			return condition;
 
 		FileInfo file;
 
@@ -181,8 +210,9 @@ public class JavaDirectory implements Directory {
 
 		String fileId = String.format(FILE_ID, userId, filename);
 
-		checkShareConditions(userId, filename, userIdShare, password, fileId);
-
+		Result<Void> condition = checkShareConditions(userId, filename, userIdShare, password, fileId);
+		if (!condition.isOK())
+			return condition;
 		FileInfo file;
 
 		synchronized (userFiles) {
@@ -216,7 +246,9 @@ public class JavaDirectory implements Directory {
 		if (filename == null || userId == null || accUserId == null)
 			return Result.error(ErrorCode.BAD_REQUEST);
 
-		authenticateUser(accUserId, password);
+		Result<Void> condition = authenticateUser(userId, password);
+		if (!condition.isOK())
+			return Result.error(condition.error());
 
 		checkUserExistance(userId);
 
@@ -239,7 +271,7 @@ public class JavaDirectory implements Directory {
 
 			if (owner.equals(accUserId) || sharedWith.contains(accUserId))
 				// return getFromFiles(fileId);
-				return new Result.ok(URI.create(file.getFileURL()));
+				return Result.ok(URI.create(file.getFileURL()));
 			else
 				return Result.error(ErrorCode.FORBIDDEN);
 
@@ -253,7 +285,9 @@ public class JavaDirectory implements Directory {
 		if (userId == null)
 			return Result.error(ErrorCode.BAD_REQUEST);
 
-		authenticateUser(userId, password);
+		Result<Void> condition = authenticateUser(userId, password);
+		if (!condition.isOK())
+			return Result.error(condition.error());
 
 		List<FileInfo> ls;
 
@@ -290,9 +324,9 @@ public class JavaDirectory implements Directory {
 		if (userId == null)
 			return Result.error(ErrorCode.BAD_REQUEST);
 
-		authenticateUser(userId, password);
-
-		// boolean aux = false;
+		Result<Void> condition = authenticateUser(userId, password);
+		if (!condition.isOK())
+			return condition;
 
 		synchronized (userFiles) {
 
@@ -302,13 +336,14 @@ public class JavaDirectory implements Directory {
 
 				if (userfiles != null) {
 
-					deleteAllFromFiles(userId);
+					Result<Void> r = deleteAllFromFiles(userId);
+					if (!r.isOK())
+						return Result.error(r.error());
 					for (FileInfo file : userfiles.values()) {
 						for (String shared_user : file.getSharedWith()) {
 							userSharedWithFiles.get(shared_user)
 							.remove(String.format(FILE_ID, userId, file.getFilename()));
 						}
-						// file_url.put(file.getFilename(), file.getFileURL());
 					}
 					userFiles.remove(userId);
 				}
@@ -331,39 +366,45 @@ public class JavaDirectory implements Directory {
 
 	// --------------------------------------- Util methods ---------------------------------------
 
-	private void checkShareConditions(String userId, String filename, String userIdShare, String password,
+	private Result<Void> checkShareConditions(String userId, String filename, String userIdShare, String password,
 			String fileId) {
 
 		if (filename == null || userId == null || userIdShare == null)
 			// Log.info ()... ?
-			return new Result.error(ErrorCode.BAD_REQUEST);
+			return Result.error(ErrorCode.BAD_REQUEST);
 
-		if (!authenticateUser(userId, password))
-			return new Result.error(ErrorCode.FORBIDDEN);
+		Result<Void> condition = authenticateUser(userId, password);
+		if (!condition.isOK())
+			return condition;
+		
+		condition = checkUserExistance(userIdShare);
+		if (!condition.isOK())
+			return condition;
 
-		if (!checkUserExistance(userIdShare))
-			return new Result.error(ErrorCode.NOT_FOUND);
+	
 
 		synchronized (userFiles) {
 
 			Map<String, FileInfo> userfiles = userFiles.get(userId);
 
 			if (userfiles == null) {
-				return new Result.error("No files from the user", ErrorCode.NOT_FOUND);
+				return Result.error(ErrorCode.NOT_FOUND);
 			}
 
 			FileInfo file = userfiles.get(fileId);
 
 			if (file == null) {
-				return new Result.error("File does not exist", ErrorCode.NOT_FOUND);
+				return Result.error(ErrorCode.NOT_FOUND);
 			}
 
 			String owner = file.getOwner();
 
 			if (!owner.equals(userId))
-				return new Result.error(ErrorCode.FORBIDDEN);
+				return Result.error(ErrorCode.FORBIDDEN);
 
 		}
+		
+		return Result.ok();
 
 	}
 
@@ -371,56 +412,69 @@ public class JavaDirectory implements Directory {
 
 	// ------------------------------------------- Users ------------------------------------------
 
-	private boolean authenticateUser(String userId, String password) {
+	private Result<Void> authenticateUser(String userId, String password) {
 
 		URI uri;
 
 		try {
-			uri = discovery.findURI(UsersServer.SERVICE);
+			uri = discovery.findURI(ServiceName.USERS.toString());
 		} catch (Exception e) {
-			return new Result.error(ErrorCode.INTERNAL_SERVER_ERROR);
+			return Result.error(ErrorCode.INTERNAL_ERROR);
 		}
-		int result;
-		synchronized(usersClient) {
-			usersClient.redifineURI(uri);
-			result = usersClient.authenticateUser(userId, password).getErrorCode();
+		Result<Void> result;
+		synchronized(usersClientFactory) {
+			UsersClient client;
+			try {
+				client = usersClientFactory.getClient(uri);
+			}
+			catch (IOException e) {
+				return Result.error(ErrorCode.INTERNAL_ERROR);
+			}
+			
+			result = client.authenticateUser(userId, password);
 		}
-		if (result == ErrorCode.NO_CONTENT.getErrorCodeCode()) {
-			return true;
+		if (result.isOK()) {
+			return Result.ok();
 		} else
-			return new Result.error(result);
+			return Result.error(result.error());
 
 	}
 
-	private boolean checkUserExistance(String userId) {
+	private Result<Void> checkUserExistance(String userId) {
 
 		URI uri;
 
 		try {
-			uri = discovery.findURI(UsersServer.SERVICE);
+			uri = discovery.findURI(ServiceName.USERS.toString());
 		} catch (Exception e) {
-			return new Result.error(ErrorCode.INTERNAL_SERVER_ERROR);
+			return Result.error(ErrorCode.INTERNAL_ERROR);
 		}
-		int result;
-		synchronized(usersClient) {
-			usersClient.redifineURI(uri);
-			result = usersClient.checkUserExistence(userId).getErrorCode();
+		Result<Void> result;
+		synchronized(usersClientFactory) {
+			UsersClient client;
+			try {
+				client = usersClientFactory.getClient(uri);
+			}
+			catch (IOException e) {
+				return Result.error(ErrorCode.INTERNAL_ERROR);
+			}
+			result = client.checkUserExistence(userId);
 		}
 
-		if (result == ErrorCode.NO_CONTENT.getErrorCodeCode()) {
-			return true;
+		if (result.isOK()) {
+			return Result.ok();
 		} else
-			return new Result.error(result);
+			return Result.error(result.error());
 
 	}
 
 	// ----------------------------------------- Files --------------------------------------------
 
-	private URI sendToFiles(byte[] data, String fileId) {
-		// Fazer aqui de forma a utilizar vários servidores de files, por exemplo com
-		// rotacao ou assim.
-
-		updateFileDiscovered();
+	private Result<URI> sendToFiles(byte[] data, String fileId) {
+		
+		Result<Void> r = updateFileDiscovered();
+		if (!r.isOK())
+			return Result.error(r.error());
 
 		URI uri = null;
 		synchronized (fileDistribution) {
@@ -428,52 +482,71 @@ public class JavaDirectory implements Directory {
 
 			for (int i = 0; i < sortedList.size(); i++) {
 				uri = sortedList.get(i).getKey();
-				Response result;
-				synchronized(filesClient) {
-					filesClient.redifineURI(uri);
-					result = filesClient.writeFile(data, fileId);
+				Result<Void> result;
+				synchronized(filesClientFactory) {
+					FilesClient client;
+					try {
+						client = filesClientFactory.getClient(uri);
+					}
+					catch (IOException e) {
+						return Result.error(ErrorCode.INTERNAL_ERROR);
+					}
+					
+					
+					//filesClient.redifineURI(uri);
+					result = client.writeFile(data, fileId);
 				}
 				if (result == null)
 					continue;
-				int ErrorCode = result.getErrorCode();
-				if (ErrorCode == ErrorCode.NO_CONTENT.getErrorCodeCode()) {
+				if (result.isOK()) {
 					int count = fileDistribution.get(uri);
 					count++;
 					fileDistribution.replace(uri, count);
 					rediscovery_counter++;
-					return uri;
-				} else
-					return new Result.error(result);
+					return Result.ok(uri);
+				}
+				else
+					return Result.error(result.error());
 			}
 		}
-		return new Result.error(ErrorCode.INTERNAL_SERVER_ERROR);
+		return Result.error(ErrorCode.INTERNAL_ERROR);
 	}
 
-	private void updateFileDiscovered() {
+	private Result<Void> updateFileDiscovered() {
 		synchronized (fileDistribution) {
 			if ((rediscovery_counter % FILE_REDISCOVERY) == 0) {
 				try {
-					URI[] uris = discovery.knownUrisOf(FilesServer.SERVICE);
+					URI[] uris = discovery.knownUrisOf(ServiceName.FILES.toString());
 					for (URI uri : uris)
 						if (!fileDistribution.containsKey(uri))
 							fileDistribution.put(uri, 0);
 				} catch (NoUrisFoundException e) {
-					return new Result.error(e);
+					return Result.error(ErrorCode.INTERNAL_ERROR);
 				}
 
 			}
 		}
+		return Result.ok();
 	}
 
-	private void deleteFromFiles(String fileId, URI uri) {
+	private Result<Void> deleteFromFiles(String fileId, URI uri) {
 
 		try {
 			// URI uri;
 
 			// uri = discovery.findURI(FilesServer.SERVICE);
-			synchronized(filesClient) {
-				filesClient.redifineURI(uri);
-				filesClient.deleteFile(fileId);
+			synchronized(filesClientFactory) {
+				FilesClient client;
+				try {
+					client = filesClientFactory.getClient(uri);
+				}
+				catch (IOException e) {
+					return Result.error(ErrorCode.INTERNAL_ERROR);
+				}
+				//filesClient.redifineURI(uri);
+				Result<Void> r = client.deleteFile(fileId);
+				if (!r.isOK())
+					return Result.error(r.error());
 			}
 			synchronized (fileDistribution) {
 				int count = fileDistribution.get(uri);
@@ -485,28 +558,39 @@ public class JavaDirectory implements Directory {
 
 
 		} catch (Exception e) {
-			return new Result.error(e);
+			return Result.error(ErrorCode.INTERNAL_ERROR);
 		}
 	}
 
-	private void deleteAllFromFiles(String userId) {
+	private Result<Void> deleteAllFromFiles(String userId) {
 		synchronized (fileDistribution) {
 			for (URI uri : fileDistribution.keySet()) {
 				try {
 
-					Response r;
-					synchronized(filesClient) {
-						filesClient.redifineURI(uri);
-						r = filesClient.deleteAllFiles(userId);
+					Result<Integer> r;
+					synchronized(filesClientFactory) {
+						FilesClient client;
+						try {
+							client = filesClientFactory.getClient(uri);
+						}
+						catch (IOException e) {
+							return Result.error(ErrorCode.INTERNAL_ERROR);
+						}
+						
+						
+						//filesClient.redifineURI(uri);
+						r = client.deleteAllFiles(userId);
+						if (!r.isOK())
+							return Result.error(r.error());
 					}
-					if (r.getErrorCode() == ErrorCode.OK.getErrorCodeCode() && r.hasEntity()) {
-						Integer deleted = r.readEntity(Integer.class);
+					if (r.isOK()) {
+						Integer deleted = r.value();
 						int prev_count = fileDistribution.get(uri);
 						fileDistribution.replace(uri, prev_count - deleted);
 
 					}
 				} catch (Exception e) {
-					return new Result.error(e);
+					return Result.error(ErrorCode.INTERNAL_ERROR);
 				}
 			}
 		}

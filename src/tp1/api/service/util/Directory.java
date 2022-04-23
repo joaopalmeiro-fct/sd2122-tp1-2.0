@@ -2,6 +2,10 @@ package tp1.api.service.util;
 
 import java.util.*;
 
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.QueryParam;
 import tp1.api.FileInfo;
 
 public interface Directory {
@@ -110,4 +114,15 @@ public interface Directory {
 	 *         BAD_REQUEST otherwise.
 	 */
 	Result<List<FileInfo>> lsFile(String userId, String password);
+	
+	/**
+	 * Deletes all files of the given user, removes it from any sharings and deletes all info associated with it.
+	 * @param userId - id of the user.
+	 * @param password - the password of the user.
+	 * @return OK if success (regardless of having any files). 
+	 *		   NOT_FOUND if the userId does not exist.
+	 *         FORBIDDEN if the password is incorrect.
+	 * 		   BAD_REQUEST otherwise.
+	 */
+	Result<Void> deleteAllFiles(String userId, String password);
 }

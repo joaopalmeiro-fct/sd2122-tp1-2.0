@@ -32,6 +32,7 @@ public class User {
 	}
 	
 	public void update (User user) {
+		
 		String email = user.getEmail();
 		if (email != null)
 			this.email = email;
@@ -43,6 +44,7 @@ public class User {
 		String password = user.getPassword();
 		if (password != null)
 			this.password = password;
+		
 	}
 
 	@Override

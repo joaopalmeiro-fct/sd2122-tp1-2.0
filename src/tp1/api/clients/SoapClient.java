@@ -28,8 +28,8 @@ public class SoapClient {
 		service = Service.create( URI.create(serverUrl + "?wsdl").toURL(), qname);		
 	}
 	
-	public void redifineURI (String serverUrl) throws IOException {
-		service = Service.create( URI.create(serverUrl + "?wsdl").toURL(), qname);	
+	public void redifineURI (URI uri) throws IOException {
+		service = Service.create( URI.create(uri.toString() + "?wsdl").toURL(), qname);	
 	}
 	
 	protected <T> T reTry(Supplier<T> func) {

@@ -1,5 +1,6 @@
 package tp1.clients.factory;
 
+import java.io.IOException;
 import java.net.URI;
 
 import tp1.api.clients.RestClient;
@@ -13,12 +14,12 @@ public class UsersClientFactory {
 	RestUsersClient restUsersClient;
 	SoapUsersClient soapUsersClient;
 	
-	public UsersClientFactory () {
+	public UsersClientFactory () throws IOException {
 		restUsersClient = new RestUsersClient();
 		soapUsersClient = new SoapUsersClient();
 	}
 
-	public UsersClient getClient(URI uri) {
+	public UsersClient getClient(URI uri) throws IOException {
 
 		//var serverURI = ; // use discovery to find a uri of the Users service;
 
@@ -27,6 +28,7 @@ public class UsersClientFactory {
 			return restUsersClient;
 		}
 		else{
+			soapUsersClient.redifineURI(uri);
 			return soapUsersClient;
 		}
 	}

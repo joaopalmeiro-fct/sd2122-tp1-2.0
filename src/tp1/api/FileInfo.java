@@ -1,20 +1,20 @@
 package tp1.api;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 /**
  * Represents a File in the system
  */
-public class FileInfo {
+public class FileInfo /*implements Comparable<FileInfo>*/{
 	/**
 	 * userId of the owner
 	 */
 	private String owner;
 	private String filename;
 	/**
-	 * URL for direct access to a file
-	 * For SOAP, URL must be of format: http://ip:port/soap/files/fileid
+	 * URL for direct access to a file. Is it url to directory or to the files server?
 	 */
 	private String fileURL;
 	/**
@@ -30,6 +30,10 @@ public class FileInfo {
 		this.filename = filename;
 		this.fileURL = fileURL;
 		this.sharedWith = sharedWith;
+		if (this.sharedWith == null)
+		{
+			this.sharedWith = new HashSet<>();
+		}
 	}
 
 	public String getOwner() {
@@ -63,6 +67,20 @@ public class FileInfo {
 	public void setSharedWith(Set<String> sharedWith) {
 		this.sharedWith = sharedWith;
 	}
+	
+	public void addElemSharedWith (String elem) {
+		if (sharedWith == null)
+			sharedWith = new HashSet<String>();
+		sharedWith.add(elem);
+	}
+	
+	public void removeElemSharedWith (String elem) {
+		if (sharedWith == null)
+			;
+		else
+			if (sharedWith.contains(elem))
+				sharedWith.remove(elem);
+	}
 
 	@Override
 	public int hashCode() {
@@ -87,6 +105,13 @@ public class FileInfo {
 				+ sharedWith + "]";
 	}
 	
+
+	/*@Override
+	public int compareTo(FileInfo o) {
+		return getFilename().compareTo(o.getFilename());
+	}*/
 	
 	
 }
+
+	
