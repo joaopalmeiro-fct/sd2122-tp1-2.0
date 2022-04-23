@@ -13,10 +13,21 @@ import tp1.api.service.util.Result;
 import tp1.api.service.util.Result.ErrorCode;
 import tp1.api.service.util.Users;
 import tp1.server.DirectoriesServer;
+import tp1.discovery.*;
 
 public class JavaUsers implements Users {
 	
-	private final Map<String,User> users = new HashMap<>();
+	Discovery discovery;
+	private final Map<String,User> users;
+	
+	private final DirectoryClient discoveryClient;
+	
+	public JavaUsers (Discovery discovery) {
+		this.discovery = discovery;
+		users = new HashMap<>();
+		
+		discoveryClient = new DiscoveryClient();
+	}
 	
 	@Override
 	public Result<String> createUser(User user) {
@@ -196,13 +207,13 @@ public class JavaUsers implements Users {
 
 	//-------------------------------- Communication with directories -------------------------------\\
 
-	private void deleteFiles(String userId, String password) {
+	private Result<Void> deleteFiles(String userId, String password) {
 		URI uri;	
 
 		try {
 			uri = discovery.findURI(DirectoriesServer.SERVICE);
 		} catch (Exception e) {
-			return Result.error(ErrorCode.INTERNAL_SERVER_ERROR);
+			return Result.error(ErrorCode.INTERNAL_ERROR);
 		}
 		
 		int result;
@@ -212,8 +223,10 @@ public class JavaUsers implements Users {
 			result = directoriesClient.deleteFiles(userId, password).getErrorCode();
 		}
 		
-		if (result != ErrorCode.NO_CONTENT.getErrorCodeCode()) 
-			return Result.error(result);
+		//pode dar erro aqui
+		if (!ErrorCode.NO_CONTENT.equals(result)) 
+			return Result.ok();
+			//return Result.error(result);
 
 	}
 

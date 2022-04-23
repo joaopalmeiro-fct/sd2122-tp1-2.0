@@ -40,24 +40,6 @@ public class JavaFiles implements Files {
 		//Log.addHandler(new StreamHandler(System.out, new SimpleFormatter()));
 	}
 
-	/*@Override
-	public Result<Void> writeFile(String fileId, byte[] data, String token) {
-		
-		return null;
-	}
-
-	@Override
-	public Result<Void> deleteFile(String fileId, String token) {
-		
-		return null;
-	}
-
-	@Override
-	public Result<byte[]> getFile(String fileId, String token) {
-		
-		return null;
-	}*/
-	
 	@Override
 	public Result<Void> writeFile(String fileId, byte[] data, String token) {
 
