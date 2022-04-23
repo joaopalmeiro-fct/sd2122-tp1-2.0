@@ -494,7 +494,7 @@ public class JavaDirectory implements Directory {
 					
 					
 					//filesClient.redifineURI(uri);
-					result = client.writeFile(data, fileId);
+					result = client.writeFile(fileId, data, "");
 				}
 				if (result == null)
 					continue;
@@ -544,7 +544,7 @@ public class JavaDirectory implements Directory {
 					return Result.error(ErrorCode.INTERNAL_ERROR);
 				}
 				//filesClient.redifineURI(uri);
-				Result<Void> r = client.deleteFile(fileId);
+				Result<Void> r = client.deleteFile(fileId, "");
 				if (!r.isOK())
 					return Result.error(r.error());
 			}
@@ -555,6 +555,7 @@ public class JavaDirectory implements Directory {
 
 				rediscovery_counter--;
 			}
+			return Result.ok();
 
 
 		} catch (Exception e) {
@@ -579,7 +580,7 @@ public class JavaDirectory implements Directory {
 						
 						
 						//filesClient.redifineURI(uri);
-						r = client.deleteAllFiles(userId);
+						r = client.deleteAllFiles(userId,"");
 						if (!r.isOK())
 							return Result.error(r.error());
 					}
@@ -594,6 +595,7 @@ public class JavaDirectory implements Directory {
 				}
 			}
 		}
+		return Result.ok();
 	}
 
 

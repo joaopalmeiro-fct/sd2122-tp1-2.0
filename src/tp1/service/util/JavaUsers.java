@@ -1,5 +1,6 @@
 package tp1.service.util;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,27 +8,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jakarta.ws.rs.WebApplicationException;
 import tp1.api.User;
 import tp1.api.clients.DirectoryClient;
 import tp1.api.service.util.Result;
 import tp1.api.service.util.Result.ErrorCode;
 import tp1.api.service.util.Users;
-import tp1.server.DirectoriesServer;
+import tp1.clients.factory.DirectoryClientFactory;
+import tp1.server.util.ServiceName;
 import tp1.discovery.*;
 
 public class JavaUsers implements Users {
 	
 	Discovery discovery;
 	private final Map<String,User> users;
-	
-	private final DirectoryClient directoryClient;
+	private DirectoryClientFactory directoryClientFactory;
+	//private final DirectoryClient directoryClient;
 	
 	public JavaUsers (Discovery discovery) {
 		this.discovery = discovery;
 		users = new HashMap<>();
 		
-		directoryClient = new DirectoryClient();
+		try {
+			directoryClientFactory = new DirectoryClientFactory();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -212,23 +218,31 @@ public class JavaUsers implements Users {
 		URI uri;	
 
 		try {
-			uri = discovery.findURI(DirectoriesServer.SERVICE);
+			uri = discovery.findURI(ServiceName.DIRECTORY.toString());
 		} catch (Exception e) {
 			return Result.error(ErrorCode.INTERNAL_ERROR);
 		}
 		
-		int result;
+		Result<Void> r;
 		
-		synchronized(directoriesClient) {
-			directoriesClient.redifineURI(uri);
-			result = directoriesClient.deleteFiles(userId, password).getErrorCode();
+		synchronized(directoryClientFactory) {
+			DirectoryClient client;
+			try {
+				client = directoryClientFactory.getClient(uri);
+			}
+			catch (IOException e) {
+				return Result.error(ErrorCode.INTERNAL_ERROR);
+			}
+			
+			
+			//filesClient.redifineURI(uri);
+			r = client.deleteAllFiles(userId,password);
+			if (!r.isOK())
+				return Result.error(r.error());
+			else
+				return Result.ok();
+		
 		}
-		
-		//pode dar erro aqui
-		if (!ErrorCode.NO_CONTENT.equals(result)) 
-			return Result.ok();
-			//return Result.error(result);
-
 	}
 
 }
