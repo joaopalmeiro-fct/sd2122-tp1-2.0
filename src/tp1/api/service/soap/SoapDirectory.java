@@ -17,7 +17,6 @@ public interface SoapDirectory {
 	static final String NAMESPACE = "http://sd2122";
 	static final String INTERFACE = "tp1.api.service.soap.SoapDirectory";
 
-
 	@WebMethod
 	FileInfo writeFile(String filename, byte []data, String userId, String password) throws DirectoryException;
 

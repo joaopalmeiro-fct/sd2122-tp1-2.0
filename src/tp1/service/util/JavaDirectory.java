@@ -64,8 +64,6 @@ public class JavaDirectory implements Directory {
 		
 		usersClientFactory = new UsersClientFactory();
 		filesClientFactory = new FilesClientFactory();
-		
-		
 	}
 
 	@Override

@@ -4,6 +4,7 @@ public enum ServiceName {
 	
 	USERS("users"),
 	DIRECTORY("directory"),
+	DIR("dir"),
 	FILES("files");
 	
 	private String serviceName;

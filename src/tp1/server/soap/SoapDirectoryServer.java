@@ -29,11 +29,11 @@ public class SoapDirectoryServer {
 		String ip = InetAddress.getLocalHost().getHostAddress();
 		String serverURI = String.format(SERVER_BASE_URI, ip, PORT);
 		Discovery discovery = new Discovery
-				(new InetSocketAddress(ip, PORT), ServiceName.DIRECTORY.getServiceName(), serverURI);
+				(new InetSocketAddress(ip, PORT), ServiceName.DIR.getServiceName(), serverURI);
 		discovery.start();
 
 		Endpoint.publish(serverURI.replace(ip, "0.0.0.0"), new DirectoryWebService(discovery));
 
-		Log.info(String.format("%s Soap Server ready @ %s\n", ServiceName.DIRECTORY.getServiceName(), serverURI));
+		Log.info(String.format("%s Soap Server ready @ %s\n", ServiceName.DIR.getServiceName(), serverURI));
 	}
 }
