@@ -2,15 +2,15 @@ package tp1.service.soap;
 
 import java.util.List;
 
+import jakarta.jws.WebService;
 import tp1.api.FileInfo;
 import tp1.api.service.soap.DirectoryException;
 import tp1.api.service.soap.SoapDirectory;
 import tp1.api.service.util.Directory;
-import tp1.api.service.util.Users;
 import tp1.discovery.Discovery;
 import tp1.service.util.JavaDirectory;
-import tp1.service.util.JavaUsers;
 
+@WebService(serviceName=SoapDirectory.NAME, targetNamespace=SoapDirectory.NAMESPACE, endpointInterface=SoapDirectory.INTERFACE)
 public class DirectoryWebService implements SoapDirectory {
 
 	Discovery discovery;
@@ -23,41 +23,77 @@ public class DirectoryWebService implements SoapDirectory {
 	}
 	
 	@Override
-	public FileInfo writeFile(String filename, byte[] data, String userId, String password) throws DirectoryException {
-		// TODO Auto-generated method stub
-		return null;
+	public FileInfo writeFile(String filename, byte[] data, String userId, String password) 
+			throws DirectoryException {
+		
+		var result = directoryImpl.writeFile(filename, data, userId, password);
+		
+        if( result.isOK() )
+            return result.value();
+        else
+            throw new DirectoryException(result.error().toString()) ;
 	}
 
 	@Override
 	public void deleteFile(String filename, String userId, String password) throws DirectoryException {
-		// TODO Auto-generated method stub
+
+		var result = directoryImpl.deleteFile(filename, userId, password);
+		
+        if( result.isOK() )
+            return;
+        else
+            throw new DirectoryException(result.error().toString()) ;
 		
 	}
 
 	@Override
 	public void shareFile(String filename, String userId, String userIdShare, String password)
 			throws DirectoryException {
-		// TODO Auto-generated method stub
+
+		var result = directoryImpl.shareFile(filename, userId, userIdShare, password);
+		
+        if( result.isOK() )
+            return;
+        else
+            throw new DirectoryException(result.error().toString()) ;
 		
 	}
 
 	@Override
 	public void unshareFile(String filename, String userId, String userIdShare, String password)
 			throws DirectoryException {
-		// TODO Auto-generated method stub
+		
+		var result = directoryImpl.unshareFile(filename, userId, userIdShare, password);
+		
+        if( result.isOK() )
+            return;
+        else
+            throw new DirectoryException(result.error().toString()) ;
 		
 	}
 
 	@Override
 	public byte[] getFile(String filename, String userId, String accUserId, String password) throws DirectoryException {
-		// TODO Auto-generated method stub
-		return null;
+
+		var result = directoryImpl.getFile(filename, userId, accUserId, password);
+		
+        if( result.isOK() )
+            return result.value();
+        else
+            throw new DirectoryException(result.error().toString()) ;
+        
 	}
 
 	@Override
 	public List<FileInfo> lsFile(String userId, String password) throws DirectoryException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		var result = directoryImpl.lsFile(userId, password);
+		
+        if( result.isOK() )
+            return result.value();
+        else
+            throw new DirectoryException(result.error().toString()) ;
+        
 	}
 
 }

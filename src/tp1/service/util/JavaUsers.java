@@ -130,7 +130,7 @@ public class JavaUsers implements Users {
 			if( password == null || !storedUser.getPassword().equals(password))
 				return Result.error( ErrorCode.FORBIDDEN );
 
-			deleteFiles(userId, password);
+			//deleteFiles(userId, password);
 			users.remove(userId);
 
 		}
