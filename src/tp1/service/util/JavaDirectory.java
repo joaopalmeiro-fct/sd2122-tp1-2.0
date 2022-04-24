@@ -102,8 +102,11 @@ public class JavaDirectory implements Directory {
 					existed = true;
 
 				Result<URI> result = sendToFiles(data, fileId);
-				if (!result.isOK())
+				if (!result.isOK()) {
+					if (!existed)
+						userFiles.get(userId).remove(fileId);
 					return Result.error(result.error());
+				}
 				
 				URI uri = result.value();
 				file.setFileURL(
