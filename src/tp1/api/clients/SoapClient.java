@@ -34,7 +34,7 @@ public class SoapClient {
 	}
 	
 	public void redifineURI (URI uri) throws MalformedURLException{
-		service = Service.create( URI.create(uri.toString() + "?wsdl").toURL(), qname);	
+		service = Service.create( URI.create(uri.toString() + "?wsdl").toURL(), qname);
 	}
 	
 	protected <T> T reTry(Supplier<T> func) {

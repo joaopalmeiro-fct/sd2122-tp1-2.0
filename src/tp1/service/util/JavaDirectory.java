@@ -495,8 +495,6 @@ public class JavaDirectory implements Directory {
 					catch (MalformedURLException e) {
 						return Result.error(ErrorCode.INTERNAL_ERROR);
 					}
-					
-					
 					//filesClient.redifineURI(uri);
 					result = client.writeFile(fileId, data, "");
 				}

@@ -29,11 +29,8 @@ public class JavaUsers implements Users {
 		users = new HashMap<>();
 		
 		directoryClientFactory = new DirectoryClientFactory();
-		
-		
 	}
 		
-	
 	@Override
 	public Result<String> createUser(User user) {
 
@@ -231,8 +228,6 @@ public class JavaUsers implements Users {
 			catch (MalformedURLException e) {
 				return Result.error(ErrorCode.INTERNAL_ERROR);
 			}
-			
-			
 			//filesClient.redifineURI(uri);
 			r = client.deleteAllFiles(userId,password);
 			if (!r.isOK())

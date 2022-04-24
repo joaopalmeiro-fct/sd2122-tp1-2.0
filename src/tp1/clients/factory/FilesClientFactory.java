@@ -9,7 +9,6 @@ import tp1.clients.rest.RestFilesClient;
 import tp1.clients.soap.SoapFilesClient;
 
 
-
 public class FilesClientFactory {
 	RestFilesClient restFilesClient;
 	SoapFilesClient soapFilesClient;
