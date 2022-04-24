@@ -184,7 +184,7 @@ public class JavaUsers implements Users {
 			return Result.error( ErrorCode.NOT_FOUND );
 
 		//Check if the password is correct
-		if( password == null || !user.getPassword().equals( password))
+		if( password == null || !user.getPassword().equals(password))
 			return Result.error( ErrorCode.FORBIDDEN );
 		
 		return Result.error( ErrorCode.NO_CONTENT );

@@ -245,9 +245,10 @@ public class JavaDirectory implements Directory {
 		if (filename == null || userId == null || accUserId == null)
 			return Result.error(ErrorCode.BAD_REQUEST);
 
-		Result<Void> condition = authenticateUser(userId, password);
-		if (!condition.isOK())
+		Result<Void> condition = authenticateUser(accUserId, password);
+		if (!condition.isOK()) {
 			return Result.error(condition.error());
+		}
 
 		checkUserExistance(userId);
 
@@ -420,6 +421,7 @@ public class JavaDirectory implements Directory {
 		} catch (Exception e) {
 			return Result.error(ErrorCode.INTERNAL_ERROR);
 		}
+		
 		Result<Void> result;
 		synchronized(usersClientFactory) {
 			UsersClient client;
