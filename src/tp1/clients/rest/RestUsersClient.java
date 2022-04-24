@@ -64,7 +64,7 @@ public class RestUsersClient extends RestClient implements UsersClient {
 		if (status == Status.NO_CONTENT.getStatusCode())
 			return Result.ok();
 		else
-			return Result.error(ErrorCode.valueOf((Status.fromStatusCode(status).toString())));
+			return Result.error(ErrorCode.errorCodeOfStatus(status));
 	}
 	
 	private Result<Void> clt_checkUserExistence(String userId) {
@@ -78,7 +78,7 @@ public class RestUsersClient extends RestClient implements UsersClient {
 		if (status == Status.NO_CONTENT.getStatusCode())
 			return Result.ok();
 		else
-			return Result.error(ErrorCode.valueOf((Status.fromStatusCode(status).toString())));
+			return Result.error(ErrorCode.errorCodeOfStatus(status));
 	}
 
 }

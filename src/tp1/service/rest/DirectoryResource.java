@@ -3,6 +3,7 @@ package tp1.service.rest;
 import java.util.List;
 
 import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import tp1.api.FileInfo;
 import tp1.api.service.rest.RestDirectory;
@@ -67,7 +68,7 @@ public class DirectoryResource implements RestDirectory{
 		var result = directoryImpl.getFile(filename, userId, accUserId, password);
 
 		if (result.isOK())
-			return result.value();
+			throw new WebApplicationException(Response.temporaryRedirect(result.uri()).build());
 		else
 			throw new WebApplicationException(Status.fromStatusCode(result.getErrorCodeNum()));
 	}

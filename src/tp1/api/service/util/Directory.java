@@ -1,5 +1,6 @@
 package tp1.api.service.util;
 
+import java.net.URI;
 import java.util.*;
 
 import jakarta.ws.rs.DELETE;

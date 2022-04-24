@@ -269,9 +269,8 @@ public class JavaDirectory implements Directory {
 			Set<String> sharedWith = file.getSharedWith();
 
 			if (owner.equals(accUserId) || sharedWith.contains(accUserId))
-				return Result.ok();
-				//return Result.ok(getFromFiles(fileId));TODO - MUDAR ISTO DE FORMA A DAR O URI
-				//return Result.ok(URI.create(file.getFileURL()));
+				//return Result.ok();
+				return Result.ok(null,URI.create(file.getFileURL()));
 			else
 				return Result.error(ErrorCode.FORBIDDEN);
 

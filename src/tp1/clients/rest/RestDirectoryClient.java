@@ -60,6 +60,6 @@ public class RestDirectoryClient extends RestClient implements DirectoryClient {
 		if (status == Status.NO_CONTENT.getStatusCode())
 			return Result.ok();
 		else
-			return Result.error(ErrorCode.valueOf((Status.fromStatusCode(status).toString())));
+			return Result.error(ErrorCode.errorCodeOfStatus(status));
 	}
 }

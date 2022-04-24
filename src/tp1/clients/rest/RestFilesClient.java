@@ -77,7 +77,7 @@ public class RestFilesClient extends RestClient implements FilesClient {
 		if (status == Status.NO_CONTENT.getStatusCode())
 			return Result.ok();
 		else
-			return Result.error(ErrorCode.valueOf((Status.fromStatusCode(status).toString())));
+			return Result.error(ErrorCode.errorCodeOfStatus(status));
 		
 	}
 
@@ -91,7 +91,7 @@ public class RestFilesClient extends RestClient implements FilesClient {
 		if (status == Status.OK.getStatusCode() && r.hasEntity())
 			return Result.ok(r.readEntity(byte[].class));
 		else
-			return Result.error(ErrorCode.valueOf((Status.fromStatusCode(status).toString())));
+			return Result.error(ErrorCode.errorCodeOfStatus(status));
 
 	}
 
@@ -105,7 +105,7 @@ public class RestFilesClient extends RestClient implements FilesClient {
 		if (status == Status.NO_CONTENT.getStatusCode())
 			return Result.ok();
 		else
-			return Result.error(ErrorCode.valueOf((Status.fromStatusCode(status).toString())));
+			return Result.error(ErrorCode.errorCodeOfStatus(status));
 
 	}
 
@@ -120,7 +120,7 @@ public class RestFilesClient extends RestClient implements FilesClient {
 		if (status == Status.OK.getStatusCode() && r.hasEntity())
 			return Result.ok(r.readEntity(Integer.class));
 		else
-			return Result.error(ErrorCode.valueOf((Status.fromStatusCode(status).toString())));
+			return Result.error(ErrorCode.errorCodeOfStatus(status));
 		
 	}
 
