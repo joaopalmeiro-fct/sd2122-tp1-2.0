@@ -71,8 +71,8 @@ public class SoapFilesClient extends SoapClient implements FilesClient {
 	public Result<Integer> deleteAllFiles(String userId, String token) {
 
 		try {
-			files.deleteAllFiles(userId, token);
-			return Result.ok();
+			var result = files.deleteAllFiles(userId, token);
+			return Result.ok(result);
 		} catch( FilesException x ) {
 			x.printStackTrace();
 			return Result.error(ErrorCode.valueOf(x.getMessage()));

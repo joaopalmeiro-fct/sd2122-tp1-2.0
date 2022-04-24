@@ -69,6 +69,7 @@ public class JavaDirectory implements Directory {
 	@Override
 	public Result<FileInfo> writeFile(String filename, byte[] data, String userId, String password) {
 
+		
 		if (filename == null || data == null || userId == null)
 			return Result.error( ErrorCode.BAD_REQUEST );
 		
@@ -420,6 +421,7 @@ public class JavaDirectory implements Directory {
 		try {
 			uri = discovery.findURI(ServiceName.USERS.getServiceName());
 		} catch (Exception e) {
+			
 			return Result.error(ErrorCode.INTERNAL_ERROR);
 		}
 		
@@ -430,6 +432,7 @@ public class JavaDirectory implements Directory {
 				client = usersClientFactory.getClient(uri);
 			}
 			catch (MalformedURLException e) {
+				System.out.println(e.getMessage());
 				return Result.error(ErrorCode.INTERNAL_ERROR);
 			}
 			
@@ -437,8 +440,10 @@ public class JavaDirectory implements Directory {
 		}
 		if (result.isOK()) {
 			return Result.ok();
-		} else
+		} else {	
+			
 			return Result.error(result.error());
+		}
 
 	}
 

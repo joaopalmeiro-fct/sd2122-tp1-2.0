@@ -3,6 +3,7 @@ package tp1.service.soap;
 import java.io.IOException;
 import java.util.List;
 
+import jakarta.inject.Singleton;
 import jakarta.jws.WebService;
 import tp1.api.User;
 import tp1.api.service.soap.SoapUsers;
@@ -11,6 +12,7 @@ import tp1.api.service.util.Users;
 import tp1.discovery.Discovery;
 import tp1.service.util.JavaUsers;
 
+@Singleton
 @WebService(serviceName=SoapUsers.NAME, targetNamespace=SoapUsers.NAMESPACE, endpointInterface=SoapUsers.INTERFACE)
 public class UsersWebService implements SoapUsers {
 

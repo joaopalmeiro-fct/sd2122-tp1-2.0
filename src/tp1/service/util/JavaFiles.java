@@ -118,7 +118,7 @@ public class JavaFiles implements Files {
 			return Result.error(ErrorCode.BAD_REQUEST);
 
 		Set<String> filesToDelete = new HashSet<>();
-		int count = 0;
+		Integer count = 0;
 
 		synchronized (fileData) {
 

@@ -36,7 +36,7 @@ public class SoapUsersClient extends SoapClient implements UsersClient {
 			users.authenticateUser(userId, password);
 			return Result.ok();
 		} catch( UsersException x ) {
-			x.printStackTrace();
+			//x.printStackTrace();
 			return Result.error(ErrorCode.valueOf(x.getMessage()));
 		}
 	}
@@ -47,7 +47,7 @@ public class SoapUsersClient extends SoapClient implements UsersClient {
 			users.checkUserExistence(userId);
 			return Result.ok();
 		} catch( UsersException x ) {
-			x.printStackTrace();
+			//x.printStackTrace();
 			return Result.error(ErrorCode.valueOf(x.getMessage()));
 		}
 	}

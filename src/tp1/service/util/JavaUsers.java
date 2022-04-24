@@ -184,7 +184,7 @@ public class JavaUsers implements Users {
 		if( password == null || !user.getPassword().equals(password))
 			return Result.error( ErrorCode.FORBIDDEN );
 		
-		return Result.error( ErrorCode.NO_CONTENT );
+		return Result.ok();
 		
 	}
 
@@ -203,7 +203,7 @@ public class JavaUsers implements Users {
 		if( user == null )
 			return Result.error( ErrorCode.NOT_FOUND );
 		
-		return Result.error( ErrorCode.NO_CONTENT );
+		return Result.ok();
 
 	}
 

@@ -2,6 +2,7 @@ package tp1.service.soap;
 
 import java.util.List;
 
+import jakarta.inject.Singleton;
 import jakarta.jws.WebService;
 import tp1.api.FileInfo;
 import tp1.api.service.soap.DirectoryException;
@@ -10,6 +11,7 @@ import tp1.api.service.util.Directory;
 import tp1.discovery.Discovery;
 import tp1.service.util.JavaDirectory;
 
+@Singleton
 @WebService(serviceName=SoapDirectory.NAME, targetNamespace=SoapDirectory.NAMESPACE, endpointInterface=SoapDirectory.INTERFACE)
 public class DirectoryWebService implements SoapDirectory {
 
