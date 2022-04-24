@@ -59,7 +59,7 @@ public class FilesWebService implements SoapFiles {
 	}
 
 	@Override
-	public Integer deleteAllFiles(String userId, String token) throws FilesException {
+	public Integer deleteAllFilesF(String userId, String token) throws FilesException {
 		
 		var result = filesImpl.deleteAllFiles(userId, token);
 		

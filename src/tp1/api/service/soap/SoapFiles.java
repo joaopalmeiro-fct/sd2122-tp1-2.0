@@ -32,5 +32,5 @@ public interface SoapFiles {
 	 * @throws FilesException otherwise
 	 */
 	@WebMethod
-	Integer deleteAllFiles(String userId, String token) throws FilesException;
+	Integer deleteAllFilesF(String userId, String token) throws FilesException;
 }

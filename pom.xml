@@ -139,5 +139,6 @@
 			    <artifactId>resolver</artifactId>
 			    <version>20050927</version>
 			</dependency>
+			
 	</dependencies>
 </project>

@@ -68,10 +68,10 @@ public class SoapFilesClient extends SoapClient implements FilesClient {
 	}
 
 	@Override
-	public Result<Integer> deleteAllFiles(String userId, String token) {
+	public Result<Integer> deleteAllFilesF(String userId, String token) {
 
 		try {
-			var result = files.deleteAllFiles(userId, token);
+			var result = files.deleteAllFilesF(userId, token);
 			return Result.ok(result);
 		} catch( FilesException x ) {
 			x.printStackTrace();

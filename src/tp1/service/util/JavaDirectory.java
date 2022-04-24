@@ -51,7 +51,7 @@ public class JavaDirectory implements Directory {
 
 	private final Discovery discovery;
 
-	public JavaDirectory (Discovery discovery) {
+	public JavaDirectory (Discovery discovery, FilesClientFactory filesClientFactory) {
 		this.discovery = discovery;
 		userFiles = new HashMap<>();
 		userSharedWithFiles = new HashMap<>();
@@ -63,7 +63,7 @@ public class JavaDirectory implements Directory {
 		
 		
 		usersClientFactory = new UsersClientFactory();
-		filesClientFactory = new FilesClientFactory();
+		this.filesClientFactory = filesClientFactory;
 	}
 
 	@Override
@@ -242,10 +242,13 @@ public class JavaDirectory implements Directory {
 
 	@Override
 	public Result<byte[]> getFile(String filename, String userId, String accUserId, String password) {
-		String fileId = String.format(FILE_ID, userId, filename);
-
+		System.out.println(String.format("VAMOS VER SE E BAD REQUEST\n filename:%s, userId:%s, accUserId:%s",filename,userId,accUserId));
 		if (filename == null || userId == null || accUserId == null)
 			return Result.error(ErrorCode.BAD_REQUEST);
+		
+		String fileId = String.format(FILE_ID, userId, filename);
+
+		
 
 		Result<Void> condition = authenticateUser(accUserId, password);
 		if (!condition.isOK()) {
@@ -585,7 +588,7 @@ public class JavaDirectory implements Directory {
 						
 						
 						//filesClient.redifineURI(uri);
-						r = client.deleteAllFiles(userId,"");
+						r = client.deleteAllFilesF(userId,"");
 						if (!r.isOK())
 							return Result.error(r.error());
 					}

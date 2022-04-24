@@ -66,7 +66,7 @@ public interface FilesClient {
 	 * @return OK if success (even if user has no files here); 
 	 * 		   BAD_REQUEST otherwise.
 	 */
-	Result<Integer> deleteAllFiles(String userId, String token);
+	Result<Integer> deleteAllFilesF(String userId, String token);
 
 
 }

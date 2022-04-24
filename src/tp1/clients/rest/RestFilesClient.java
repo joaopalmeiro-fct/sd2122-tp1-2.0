@@ -59,7 +59,7 @@ public class RestFilesClient extends RestClient implements FilesClient {
 	}
 
 	@Override
-	public Result<Integer> deleteAllFiles(String userId, String token) {
+	public Result<Integer> deleteAllFilesF(String userId, String token) {
 		return super.reTry(() -> {
 			return clt_deleteAllFiles(userId);
 		});
