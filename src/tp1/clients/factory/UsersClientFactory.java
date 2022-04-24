@@ -1,12 +1,11 @@
 package tp1.clients.factory;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 
-import tp1.api.clients.RestClient;
+
 import tp1.api.clients.UsersClient;
-import tp1.api.service.util.Users;
+
 import tp1.clients.rest.RestUsersClient;
 import tp1.clients.soap.SoapUsersClient;
 

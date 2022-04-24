@@ -1,10 +1,11 @@
 package tp1.clients.soap;
 
-import java.io.IOException;
+
 import java.net.MalformedURLException;
 import java.net.URI;
 
-import jakarta.ws.rs.core.Response;
+
+import jakarta.xml.ws.BindingProvider;
 import tp1.api.clients.SoapClient;
 import tp1.api.clients.UsersClient;
 import tp1.api.service.soap.SoapUsers;
@@ -16,9 +17,10 @@ public class SoapUsersClient extends SoapClient implements UsersClient {
 
 	SoapUsers users;
 
-	public SoapUsersClient(String serverUrl) throws IOException {
+	public SoapUsersClient(String serverUrl) throws MalformedURLException {
 		super(SoapUsers.NAMESPACE, SoapUsers.NAME, serverUrl);
 		users = service.getPort(tp1.api.service.soap.SoapUsers.class);
+		super.setClientTimeouts((BindingProvider)users);
 	}
 
 	public SoapUsersClient() {
@@ -28,6 +30,7 @@ public class SoapUsersClient extends SoapClient implements UsersClient {
 	public void redifineURI (URI uri) throws MalformedURLException{
 		super.redifineURI(uri);
 		users = service.getPort(tp1.api.service.soap.SoapUsers.class);
+		super.setClientTimeouts((BindingProvider)users);
 	}
 	
 	@Override

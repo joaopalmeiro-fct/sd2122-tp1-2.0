@@ -4,23 +4,20 @@ package tp1.service.util;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
 import tp1.api.FileInfo;
-import tp1.api.User;
+
 import tp1.api.clients.FilesClient;
 import tp1.api.clients.UsersClient;
 import tp1.api.service.util.Directory;
 import tp1.api.service.util.Result;
 import tp1.api.service.util.Result.ErrorCode;
-import tp1.api.service.util.Users;
+
 import tp1.clients.factory.FilesClientFactory;
 import tp1.clients.factory.UsersClientFactory;
 import tp1.discovery.Discovery;
@@ -46,8 +43,7 @@ public class JavaDirectory implements Directory {
 
 	private UsersClientFactory usersClientFactory;
 	private FilesClientFactory filesClientFactory;
-	/*private final RestFilesClient filesClient;
-	private final RestUsersClient usersClient;*/
+
 
 	private final Discovery discovery;
 
@@ -57,10 +53,6 @@ public class JavaDirectory implements Directory {
 		userSharedWithFiles = new HashMap<>();
 		fileDistribution = new HashMap<>();
 		rediscovery_counter = 0;
-		
-		/*filesClient = new RestFilesClient();
-		usersClient = new RestUsersClient();*/
-		
 		
 		usersClientFactory = new UsersClientFactory();
 		this.filesClientFactory = filesClientFactory;

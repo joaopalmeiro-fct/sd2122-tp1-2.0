@@ -1,16 +1,15 @@
 package tp1.clients.rest;
 
 import java.net.URI;
-import java.util.logging.Logger;
 
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import tp1.api.clients.DirectoryClient;
-import tp1.api.clients.FilesClient;
+
 import tp1.api.clients.RestClient;
 import tp1.api.service.rest.RestDirectory;
-import tp1.api.service.rest.RestFiles;
+
 import tp1.api.service.rest.RestUsers;
 import tp1.api.service.util.Result;
 import tp1.api.service.util.Result.ErrorCode;

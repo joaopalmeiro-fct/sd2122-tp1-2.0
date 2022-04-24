@@ -4,10 +4,10 @@ import jakarta.inject.Singleton;
 import jakarta.jws.WebService;
 import tp1.api.service.soap.FilesException;
 import tp1.api.service.soap.SoapFiles;
-import tp1.api.service.util.Directory;
+
 import tp1.api.service.util.Files;
 import tp1.discovery.Discovery;
-import tp1.service.util.JavaDirectory;
+
 import tp1.service.util.JavaFiles;
 
 @Singleton

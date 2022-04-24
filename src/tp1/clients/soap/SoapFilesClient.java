@@ -4,12 +4,11 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 
+import jakarta.xml.ws.BindingProvider;
 import tp1.api.clients.FilesClient;
 import tp1.api.clients.SoapClient;
 import tp1.api.service.soap.FilesException;
 import tp1.api.service.soap.SoapFiles;
-import tp1.api.service.soap.SoapUsers;
-import tp1.api.service.soap.UsersException;
 import tp1.api.service.util.Result;
 import tp1.api.service.util.Result.ErrorCode;
 
@@ -20,6 +19,7 @@ public class SoapFilesClient extends SoapClient implements FilesClient {
 	public SoapFilesClient(String serverUrl) throws IOException {
 		super(SoapFiles.NAMESPACE, SoapFiles.NAME, serverUrl);
 		files = service.getPort(tp1.api.service.soap.SoapFiles.class);
+		super.setClientTimeouts((BindingProvider)files);
 	}
 
 	public SoapFilesClient(){
@@ -29,6 +29,7 @@ public class SoapFilesClient extends SoapClient implements FilesClient {
 	public void redifineURI (URI uri) throws MalformedURLException{
 		super.redifineURI(uri);
 		files = service.getPort(tp1.api.service.soap.SoapFiles.class);
+		super.setClientTimeouts((BindingProvider)files);
 	}
 
 	@Override

@@ -4,10 +4,10 @@ import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response.Status;
 import tp1.api.service.rest.RestFiles;
 import tp1.api.service.util.Files;
-import tp1.api.service.util.Users;
+
 import tp1.discovery.Discovery;
 import tp1.service.util.JavaFiles;
-import tp1.service.util.JavaUsers;
+
 
 public class FilesResource implements RestFiles {
 	

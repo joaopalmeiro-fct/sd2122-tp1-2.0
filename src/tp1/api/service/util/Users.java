@@ -1,11 +1,6 @@
 package tp1.api.service.util;
 
 import java.util.List;
-
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.QueryParam;
 import tp1.api.User;
 
 public interface Users {

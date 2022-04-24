@@ -1,6 +1,6 @@
 package tp1.api.clients;
 
-import java.io.IOException;
+
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.function.Supplier;
@@ -9,9 +9,11 @@ import javax.xml.namespace.QName;
 
 import com.sun.xml.ws.client.BindingProviderProperties;
 
+
 import jakarta.xml.ws.BindingProvider;
 import jakarta.xml.ws.Service;
 import jakarta.xml.ws.WebServiceException;
+
 
 public class SoapClient {
 
@@ -26,7 +28,8 @@ public class SoapClient {
 	
 	public SoapClient (String namespace, String name, String serverUrl) throws MalformedURLException {
 		qname = new QName(namespace, name);
-		service = Service.create( URI.create(serverUrl + "?wsdl").toURL(), qname);		
+		service = Service.create( URI.create(serverUrl + "?wsdl").toURL(), qname);
+		//setClientTimeouts((BindingProvider)service);
 	}
 	
 	public SoapClient(String namespace, String name) {
@@ -35,18 +38,21 @@ public class SoapClient {
 	
 	public void redifineURI (URI uri) throws MalformedURLException{
 		service = Service.create( URI.create(uri.toString() + "?wsdl").toURL(), qname);
+		//setClientTimeouts((BindingProvider)service);
 	}
 	
 	protected <T> T reTry(Supplier<T> func) {
-		for (int i = 0; i < MAX_RETRIES; i++)
+		for (int i = 0; i < MAX_RETRIES; i++) {
 			try {
 				return func.get();
-			} catch (WebServiceException x) {
+			} catch (WebServiceException wx) {
 				sleep(RETRY_SLEEP);
+			
 			} catch (Exception x) {
 				x.printStackTrace();
 				break;
 			}
+		}
 		return null;
 	}
 
@@ -57,7 +63,8 @@ public class SoapClient {
 		}
 	}
 	
-	static void setClientTimeouts(BindingProvider port ) {
+	protected static void setClientTimeouts(BindingProvider port ) {
+		
 		port.getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, CONNECT_TIMEOUT);
 		port.getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, READ_TIMEOUT);		
 	}

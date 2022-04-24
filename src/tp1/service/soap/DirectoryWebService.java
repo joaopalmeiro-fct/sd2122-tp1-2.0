@@ -12,7 +12,7 @@ import tp1.api.service.soap.DirectoryException;
 import tp1.api.service.soap.SoapDirectory;
 import tp1.api.service.util.Directory;
 import tp1.api.service.util.Result;
-import tp1.api.service.util.Result.ErrorCode;
+
 import tp1.clients.factory.FilesClientFactory;
 import tp1.discovery.Discovery;
 import tp1.service.util.JavaDirectory;

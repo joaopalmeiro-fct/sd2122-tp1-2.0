@@ -1,12 +1,8 @@
 package tp1.api.service.util;
 
-import java.net.URI;
+
 import java.util.*;
 
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.QueryParam;
 import tp1.api.FileInfo;
 
 public interface Directory {

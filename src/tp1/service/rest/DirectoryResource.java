@@ -11,10 +11,10 @@ import jakarta.ws.rs.core.Response.Status;
 import tp1.api.FileInfo;
 import tp1.api.clients.FilesClient;
 import tp1.api.service.rest.RestDirectory;
-import tp1.api.service.soap.DirectoryException;
+
 import tp1.api.service.util.Directory;
 import tp1.api.service.util.Result;
-import tp1.api.service.util.Result.ErrorCode;
+
 import tp1.clients.factory.FilesClientFactory;
 import tp1.discovery.Discovery;
 import tp1.service.util.JavaDirectory;

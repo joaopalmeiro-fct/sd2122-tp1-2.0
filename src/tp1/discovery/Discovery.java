@@ -9,14 +9,11 @@ import java.net.MulticastSocket;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Map;
-import java.util.Set;
+
 import java.util.HashMap;
-import java.util.List;
+
 import java.util.logging.Logger;
 
 import tp1.discovery.util.ServiceAddress;
