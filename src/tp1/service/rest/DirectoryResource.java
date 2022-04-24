@@ -62,6 +62,7 @@ public class DirectoryResource implements RestDirectory{
 	}
 
 	@Override
+	//TODO - MUDAR ISTO DE FORMA A DAR REDIRECT
 	public byte[] getFile(String filename, String userId, String accUserId, String password) {
 		var result = directoryImpl.getFile(filename, userId, accUserId, password);
 
