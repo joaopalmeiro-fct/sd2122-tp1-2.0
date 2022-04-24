@@ -216,7 +216,7 @@ public class JavaUsers implements Users {
 		URI uri;	
 
 		try {
-			uri = discovery.findURI(ServiceName.DIRECTORY.toString());
+			uri = discovery.findURI(ServiceName.DIRECTORY.getServiceName());
 		} catch (Exception e) {
 			return Result.error(ErrorCode.INTERNAL_ERROR);
 		}

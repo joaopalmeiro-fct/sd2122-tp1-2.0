@@ -107,12 +107,13 @@ public class JavaDirectory implements Directory {
 				
 				URI uri = result.value();
 				file.setFileURL(
-						uri.toURL().toString().concat(FORWARD_SLASH + ServiceName.FILES.toString() + FORWARD_SLASH + fileId));
+						uri.toURL().toString().concat(FORWARD_SLASH + ServiceName.FILES.getServiceName() + FORWARD_SLASH + fileId));
 
 				return Result.ok(file);
 
 			} catch (Exception e) {
 				e.printStackTrace();
+				System.out.println(e.getMessage());
 				if (!existed)
 					userFiles.get(userId).remove(fileId);
 				return Result.error(ErrorCode.INTERNAL_ERROR);
@@ -149,7 +150,7 @@ public class JavaDirectory implements Directory {
 
 			try {
 				synchronized (userSharedWithFiles) {
-					URI uri = new URI(file.getFileURL().split(FORWARD_SLASH + ServiceName.FILES.toString())[0]);
+					URI uri = new URI(file.getFileURL().split(FORWARD_SLASH + ServiceName.FILES.getServiceName())[0]);
 					deleteFromFiles(fileId, uri);
 					for (String u : file.getSharedWith()) {
 						userSharedWithFiles.get(u).remove(fileId);
@@ -416,7 +417,7 @@ public class JavaDirectory implements Directory {
 		URI uri;
 
 		try {
-			uri = discovery.findURI(ServiceName.USERS.toString());
+			uri = discovery.findURI(ServiceName.USERS.getServiceName());
 		} catch (Exception e) {
 			return Result.error(ErrorCode.INTERNAL_ERROR);
 		}
@@ -444,7 +445,7 @@ public class JavaDirectory implements Directory {
 		URI uri;
 
 		try {
-			uri = discovery.findURI(ServiceName.USERS.toString());
+			uri = discovery.findURI(ServiceName.USERS.getServiceName());
 		} catch (Exception e) {
 			return Result.error(ErrorCode.INTERNAL_ERROR);
 		}
@@ -515,7 +516,7 @@ public class JavaDirectory implements Directory {
 		synchronized (fileDistribution) {
 			if ((rediscovery_counter % FILE_REDISCOVERY) == 0) {
 				try {
-					URI[] uris = discovery.knownUrisOf(ServiceName.FILES.toString());
+					URI[] uris = discovery.knownUrisOf(ServiceName.FILES.getServiceName());
 					for (URI uri : uris)
 						if (!fileDistribution.containsKey(uri))
 							fileDistribution.put(uri, 0);
