@@ -32,6 +32,22 @@ public class SoapUsersClient extends SoapClient implements UsersClient {
 	
 	@Override
 	public Result<Void> authenticateUser(String userId, String password) {
+		return super.reTry(() -> {
+			return clt_authenticateUser(userId, password);
+		});
+	}
+	
+	@Override
+	public Result<Void> checkUserExistence(String userId) {
+		return super.reTry(() -> {
+			return clt_checkUserExistence(userId);
+		});
+	}
+	
+	
+	//-------------------------------------------------------------------------------------------
+	
+	private Result<Void> clt_authenticateUser(String userId, String password) {
 		try {
 			users.authenticateUser(userId, password);
 			return Result.ok();
@@ -41,8 +57,7 @@ public class SoapUsersClient extends SoapClient implements UsersClient {
 		}
 	}
 
-	@Override
-	public Result<Void> checkUserExistence(String userId) {
+	private Result<Void> clt_checkUserExistence(String userId) {
 		try {
 			users.checkUserExistence(userId);
 			return Result.ok();
