@@ -17,9 +17,9 @@ public class SoapUsersClient extends SoapClient implements UsersClient {
 		users = service.getPort(tp1.api.service.soap.SoapUsers.class);
 	}
 
-	public SoapUsersClient() throws IOException {
-		super(SoapUsers.NAMESPACE, SoapUsers.NAME, "");
-		users = service.getPort(tp1.api.service.soap.SoapUsers.class);
+	public SoapUsersClient() {
+		super(SoapUsers.NAMESPACE, SoapUsers.NAME);
+		
 	}
 	
 	@Override

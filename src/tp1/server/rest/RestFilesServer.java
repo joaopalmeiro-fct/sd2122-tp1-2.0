@@ -12,6 +12,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 import tp1.discovery.Discovery;
 import tp1.server.util.CustomLoggingFilter;
 import tp1.server.util.GenericExceptionMapper;
+import tp1.server.util.ServiceName;
 import tp1.service.rest.FilesResource;
 import tp1.util.Debug;
 
@@ -25,7 +26,6 @@ public class RestFilesServer {
 	}
 
 	public static final int PORT = 8080;
-	public static final String SERVICE = "files";
 	private static final String SERVER_URI_FMT = "http://%s:%s/rest";
 
 	public static void main(String[] args) {
@@ -35,7 +35,7 @@ public class RestFilesServer {
 			String ip = InetAddress.getLocalHost().getHostAddress();
 			String serverURI = String.format(SERVER_URI_FMT, ip, PORT);
 
-			Discovery discovery = new Discovery(new InetSocketAddress(ip, PORT), SERVICE, serverURI);
+			Discovery discovery = new Discovery(new InetSocketAddress(ip, PORT), ServiceName.FILES.getServiceName(), serverURI);
 			discovery.start();
 
 			ResourceConfig config = new ResourceConfig();
@@ -45,7 +45,7 @@ public class RestFilesServer {
 
 			JdkHttpServerFactory.createHttpServer(URI.create(serverURI), config);
 
-			Log.info(String.format("%s Server ready @ %s\n", SERVICE, serverURI));
+			Log.info(String.format("%s Server ready @ %s\n", ServiceName.FILES.getServiceName(), serverURI));
 
 			// More code can be executed here...
 		} catch (Exception e) {

@@ -1,6 +1,7 @@
 package tp1.clients.factory;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 
 import tp1.api.clients.RestClient;
@@ -14,12 +15,12 @@ public class UsersClientFactory {
 	RestUsersClient restUsersClient;
 	SoapUsersClient soapUsersClient;
 	
-	public UsersClientFactory () throws IOException {
+	public UsersClientFactory () {
 		restUsersClient = new RestUsersClient();
 		soapUsersClient = new SoapUsersClient();
 	}
 
-	public UsersClient getClient(URI uri) throws IOException {
+	public UsersClient getClient(URI uri) throws MalformedURLException {
 
 		//var serverURI = ; // use discovery to find a uri of the Users service;
 

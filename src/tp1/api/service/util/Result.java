@@ -21,7 +21,22 @@ public interface Result<T> {
 	 * NOT_FOUND - an access occurred to something that does not exist
 	 * INTERNAL_ERROR - something unexpected happened
 	 */
-	enum ErrorCode{ OK, NO_CONTENT, CONFLICT, NOT_FOUND, BAD_REQUEST, FORBIDDEN, INTERNAL_ERROR, NOT_IMPLEMENTED };
+	enum ErrorCode{ 
+		
+		OK(200), NO_CONTENT(204), CONFLICT(409), NOT_FOUND(404), BAD_REQUEST(400), FORBIDDEN(403), INTERNAL_ERROR(500), NOT_IMPLEMENTED(501); 
+	
+		private int errorCodeNum;
+		
+		ErrorCode (int errorCode){
+			this.errorCodeNum = errorCode;
+		}
+		
+		int getErrorCodeNum() {
+			return errorCodeNum;
+		}
+		
+	};
+	
 	
 	/**
 	 * Tests if the result is an error.
@@ -67,6 +82,10 @@ public interface Result<T> {
 		return new ErrorResult<>(error);		
 	}
 	
+	int getErrorCodeNum();
+	
+	
+	
 }
 
 /*
@@ -98,6 +117,15 @@ class OkResult<T> implements tp1.api.service.util.Result<T> {
 	public String toString() {
 		return "(OK, " + value() + ")";
 	}
+
+	@Override
+	public int getErrorCodeNum() {
+		if (result!=null)
+			return ErrorCode.OK.getErrorCodeNum();
+		else
+			return ErrorCode.NO_CONTENT.getErrorCodeNum();
+			
+	}
 }
 
 class ErrorResult<T> implements tp1.api.service.util.Result<T> {
@@ -125,5 +153,10 @@ class ErrorResult<T> implements tp1.api.service.util.Result<T> {
 	
 	public String toString() {
 		return "(" + error() + ")";		
+	}
+
+	@Override
+	public int getErrorCodeNum() {
+		return error.getErrorCodeNum();
 	}
 }

@@ -1,6 +1,7 @@
 package tp1.clients.soap;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 import tp1.api.clients.DirectoryClient;
 import tp1.api.clients.SoapClient;
@@ -12,14 +13,13 @@ public class SoapDirectoryClient extends SoapClient implements DirectoryClient {
 
 	SoapDirectory directory;
 
-	public SoapDirectoryClient(String serverUrl) throws IOException {
+	public SoapDirectoryClient(String serverUrl) throws MalformedURLException {
 		super(SoapDirectory.NAMESPACE, SoapDirectory.NAME, serverUrl);
 		directory = service.getPort(tp1.api.service.soap.SoapDirectory.class);
 	}
 
-	public SoapDirectoryClient() throws IOException {
-		super(SoapDirectory.NAMESPACE, SoapDirectory.NAME, "");
-		directory = service.getPort(tp1.api.service.soap.SoapDirectory.class);
+	public SoapDirectoryClient() {
+		super(SoapDirectory.NAMESPACE, SoapDirectory.NAME);
 	}
 
 	@Override

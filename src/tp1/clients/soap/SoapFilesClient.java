@@ -17,9 +17,8 @@ public class SoapFilesClient extends SoapClient implements FilesClient {
 		files = service.getPort(tp1.api.service.soap.SoapFiles.class);
 	}
 	
-	public SoapFilesClient() throws IOException {
-		super(SoapFiles.NAMESPACE, SoapFiles.NAME, "");
-		files = service.getPort(tp1.api.service.soap.SoapFiles.class);
+	public SoapFilesClient(){
+		super(SoapFiles.NAMESPACE, SoapFiles.NAME);
 	}
 
 	@Override

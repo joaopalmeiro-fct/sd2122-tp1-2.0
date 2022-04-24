@@ -1,6 +1,7 @@
 package tp1.service.util;
 
-import java.io.IOException;
+
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,13 +61,10 @@ public class JavaDirectory implements Directory {
 		/*filesClient = new RestFilesClient();
 		usersClient = new RestUsersClient();*/
 		
-		try {
-			usersClientFactory = new UsersClientFactory();
-			filesClientFactory = new FilesClientFactory();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+		usersClientFactory = new UsersClientFactory();
+		filesClientFactory = new FilesClientFactory();
+		
 		
 	}
 
@@ -271,7 +269,7 @@ public class JavaDirectory implements Directory {
 
 			if (owner.equals(accUserId) || sharedWith.contains(accUserId))
 				return Result.ok();
-				//return Result.ok(getFromFiles(fileId));
+				//return Result.ok(getFromFiles(fileId));TODO
 				//return Result.ok(URI.create(file.getFileURL()));
 			else
 				return Result.error(ErrorCode.FORBIDDEN);
@@ -428,7 +426,7 @@ public class JavaDirectory implements Directory {
 			try {
 				client = usersClientFactory.getClient(uri);
 			}
-			catch (IOException e) {
+			catch (MalformedURLException e) {
 				return Result.error(ErrorCode.INTERNAL_ERROR);
 			}
 			
@@ -456,7 +454,7 @@ public class JavaDirectory implements Directory {
 			try {
 				client = usersClientFactory.getClient(uri);
 			}
-			catch (IOException e) {
+			catch (MalformedURLException e) {
 				return Result.error(ErrorCode.INTERNAL_ERROR);
 			}
 			result = client.checkUserExistence(userId);
@@ -489,7 +487,7 @@ public class JavaDirectory implements Directory {
 					try {
 						client = filesClientFactory.getClient(uri);
 					}
-					catch (IOException e) {
+					catch (MalformedURLException e) {
 						return Result.error(ErrorCode.INTERNAL_ERROR);
 					}
 					
@@ -541,7 +539,7 @@ public class JavaDirectory implements Directory {
 				try {
 					client = filesClientFactory.getClient(uri);
 				}
-				catch (IOException e) {
+				catch (MalformedURLException e) {
 					return Result.error(ErrorCode.INTERNAL_ERROR);
 				}
 				//filesClient.redifineURI(uri);
@@ -575,7 +573,7 @@ public class JavaDirectory implements Directory {
 						try {
 							client = filesClientFactory.getClient(uri);
 						}
-						catch (IOException e) {
+						catch (MalformedURLException e) {
 							return Result.error(ErrorCode.INTERNAL_ERROR);
 						}
 						

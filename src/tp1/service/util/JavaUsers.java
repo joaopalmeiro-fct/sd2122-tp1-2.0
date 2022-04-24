@@ -1,6 +1,6 @@
 package tp1.service.util;
 
-import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,13 +28,11 @@ public class JavaUsers implements Users {
 		this.discovery = discovery;
 		users = new HashMap<>();
 		
-		try {
-			directoryClientFactory = new DirectoryClientFactory();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+		directoryClientFactory = new DirectoryClientFactory();
+		
+		
 	}
+		
 	
 	@Override
 	public Result<String> createUser(User user) {
@@ -230,7 +228,7 @@ public class JavaUsers implements Users {
 			try {
 				client = directoryClientFactory.getClient(uri);
 			}
-			catch (IOException e) {
+			catch (MalformedURLException e) {
 				return Result.error(ErrorCode.INTERNAL_ERROR);
 			}
 			

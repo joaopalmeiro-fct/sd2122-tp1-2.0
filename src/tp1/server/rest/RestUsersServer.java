@@ -9,8 +9,6 @@ import java.util.logging.Logger;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response.Status;
 import tp1.discovery.Discovery;
 import tp1.server.util.CustomLoggingFilter;
 import tp1.server.util.GenericExceptionMapper;
@@ -36,8 +34,7 @@ public class RestUsersServer {
 			Debug.setLogLevel(Level.INFO, Debug.SD2122);
 			String ip = InetAddress.getLocalHost().getHostAddress();
 			String serverURI = String.format(SERVER_URI_FMT, ip, PORT);
-			Discovery discovery = new Discovery
-					(new InetSocketAddress(ip, PORT), ServiceName.USERS.toString(), serverURI);
+			Discovery discovery = new Discovery(new InetSocketAddress(ip, PORT), ServiceName.USERS.getServiceName(), serverURI);
 			discovery.start();
 
 			ResourceConfig config = new ResourceConfig();
@@ -47,7 +44,7 @@ public class RestUsersServer {
 
 			JdkHttpServerFactory.createHttpServer(URI.create(serverURI), config);
 
-			Log.info(String.format("%s Server ready @ %s\n", ServiceName.USERS.toString(), serverURI));
+			Log.info(String.format("%s Server ready @ %s\n", ServiceName.USERS.getServiceName(), serverURI));
 
 			// More code can be executed here...
 		} catch (Exception e) {

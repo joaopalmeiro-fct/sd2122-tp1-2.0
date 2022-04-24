@@ -1,5 +1,6 @@
 package tp1.service.soap;
 
+import java.io.IOException;
 import java.util.List;
 
 import tp1.api.User;
@@ -15,7 +16,7 @@ public class UsersWebService implements SoapUsers {
 	
 	final Users userImpl;
 	
-	public UsersWebService (Discovery discovery) {
+	public UsersWebService (Discovery discovery) throws IOException {
 		this.discovery = discovery;
 		userImpl = new JavaUsers(discovery);
 	}

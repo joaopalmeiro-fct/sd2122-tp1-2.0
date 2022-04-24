@@ -36,7 +36,7 @@ public class RestDirectoryServer {
 			String serverURI = String.format(SERVER_URI_FMT, ip, PORT);
 
 			Discovery discovery = new Discovery
-					(new InetSocketAddress(ip, PORT), ServiceName.USERS.toString(), serverURI);
+					(new InetSocketAddress(ip, PORT), ServiceName.DIRECTORY.getServiceName(), serverURI);
 			discovery.start();
 
 			ResourceConfig config = new ResourceConfig();
@@ -46,7 +46,7 @@ public class RestDirectoryServer {
 
 			JdkHttpServerFactory.createHttpServer(URI.create(serverURI), config);
 
-			Log.info(String.format("%s Server ready @ %s\n", ServiceName.USERS.toString(), serverURI));
+			Log.info(String.format("%s Server ready @ %s\n", ServiceName.DIRECTORY.getServiceName(), serverURI));
 
 		} catch (Exception e) {
 			Log.severe(e.getMessage());

@@ -1,6 +1,7 @@
 package tp1.api.clients;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.function.Supplier;
 
@@ -23,12 +24,16 @@ public class SoapClient {
 	protected QName qname;		
 	protected Service service;
 	
-	public SoapClient (String namespace, String name, String serverUrl) throws IOException {
+	public SoapClient (String namespace, String name, String serverUrl) throws MalformedURLException {
 		qname = new QName(namespace, name);
 		service = Service.create( URI.create(serverUrl + "?wsdl").toURL(), qname);		
 	}
 	
-	public void redifineURI (URI uri) throws IOException {
+	public SoapClient(String namespace, String name) {
+		qname = new QName(namespace, name);
+	}
+	
+	public void redifineURI (URI uri) throws MalformedURLException{
 		service = Service.create( URI.create(uri.toString() + "?wsdl").toURL(), qname);	
 	}
 	

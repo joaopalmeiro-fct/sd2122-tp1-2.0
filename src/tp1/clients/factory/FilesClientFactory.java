@@ -1,7 +1,8 @@
 package tp1.clients.factory;
 
-import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
+
 
 import tp1.api.clients.FilesClient;
 import tp1.clients.rest.RestFilesClient;
@@ -13,12 +14,12 @@ public class FilesClientFactory {
 	RestFilesClient restFilesClient;
 	SoapFilesClient soapFilesClient;
 
-public FilesClientFactory () throws IOException {
+public FilesClientFactory () {
 	restFilesClient = new RestFilesClient();
 	soapFilesClient = new SoapFilesClient();
 }
 
-public FilesClient getClient(URI uri) throws IOException {
+public FilesClient getClient(URI uri) throws MalformedURLException {
 
 	if (uri.toString().endsWith("rest")) {
 		restFilesClient.redifineURI(uri);
