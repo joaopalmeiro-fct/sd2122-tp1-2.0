@@ -15,7 +15,6 @@ import tp1.service.util.JavaFiles;
 public class FilesWebService implements SoapFiles {
 	
 	Discovery discovery;
-	
 	final Files filesImpl;
 	
 	public FilesWebService (Discovery discovery) {
@@ -42,8 +41,7 @@ public class FilesWebService implements SoapFiles {
         if( result.isOK() )
             return;
         else
-            throw new FilesException(result.error().toString()) ;
-		
+            throw new FilesException(result.error().toString());
 	}
 
 	@Override
@@ -54,8 +52,7 @@ public class FilesWebService implements SoapFiles {
         if( result.isOK() )
             return;
         else
-            throw new FilesException(result.error().toString()) ;
-		
+            throw new FilesException(result.error().toString());
 	}
 
 	@Override
@@ -66,8 +63,7 @@ public class FilesWebService implements SoapFiles {
         if( result.isOK() )
             return result.value();
         else
-            throw new FilesException(result.error().toString()) ;
-		
+            throw new FilesException(result.error().toString());
 	}
 
 }

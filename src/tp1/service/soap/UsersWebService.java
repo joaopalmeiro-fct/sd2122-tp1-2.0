@@ -101,7 +101,6 @@ public class UsersWebService implements SoapUsers {
             return;
         else
             throw new UsersException(result.error().toString());
-		
 	}
 
 }

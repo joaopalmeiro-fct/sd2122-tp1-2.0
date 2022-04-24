@@ -19,7 +19,6 @@ import tp1.util.Debug;
 public class RestDirectoryServer {
 
 	private static Logger Log = Logger.getLogger(RestDirectoryServer.class.getName());
-	// private static Discovery discovery = null;
 
 	static {
 		System.setProperty("java.net.preferIPv4Stack", "true");

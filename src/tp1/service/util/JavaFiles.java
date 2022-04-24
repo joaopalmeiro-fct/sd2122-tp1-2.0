@@ -24,33 +24,26 @@ public class JavaFiles implements Files {
 	
 	private static final String FILEPATH = ".\\files\\";
 	private static final String FILEIDSPLIT = "-";
-	//private static Logger Log = Logger.getLogger(JavaFiles.class.getName());
 
 	//map that associates the fileId with the file itself
 	private final Map<String, File> fileData = new HashMap<String, File>();
 
-	// private static Logger Log = Logger.getLogger(FilesResource.class.getName());
-
-	// Nao necessario por enquanto, sera necessario quando fizer uso do token
-	private Discovery discovery;
+	//Nao necessario por enquanto, sera necessario quando fizer uso do token
+	//private Discovery discovery;
 
 	public JavaFiles(Discovery discovery) {
-		this.discovery = discovery;
-		//Log.setLevel(Level.ALL);
-		//Log.addHandler(new StreamHandler(System.out, new SimpleFormatter()));
+		//this.discovery = discovery;
 	}
 
 	@Override
 	public Result<Void> writeFile(String fileId, byte[] data, String token) {
 
 		try {
-
 			File file = new File(FILEPATH + fileId);
 			file.createNewFile();
 			try (FileOutputStream stream = new FileOutputStream(FILEPATH + fileId)) {
 				stream.write(data);
-				stream.close(); // Provavelmente redudante ja que o try-with-resources fecha, mas pelo sim pelo
-				// nao, ca esta
+				stream.close(); 
 			}
 
 			synchronized (fileData) {
@@ -94,7 +87,6 @@ public class JavaFiles implements Files {
 				return Result.error(ErrorCode.NOT_FOUND);
 
 			try {
-				// File file = fileData.get(FILEPATH + fileId);
 				byte[] fileContent;
 
 				try (FileInputStream stream = new FileInputStream(file)) {
@@ -108,7 +100,6 @@ public class JavaFiles implements Files {
 				return Result.error(ErrorCode.INTERNAL_ERROR);
 			}
 		}
-
 	}
 
 	@Override
@@ -140,7 +131,6 @@ public class JavaFiles implements Files {
 			} 
 		}
 		return Result.ok(count);
-
 	}
 
 }

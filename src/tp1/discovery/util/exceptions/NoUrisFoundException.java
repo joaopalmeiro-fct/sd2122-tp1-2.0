@@ -4,7 +4,7 @@ package tp1.discovery.util.exceptions;
 public class NoUrisFoundException extends Exception {
 
 	public NoUrisFoundException(String service) {
-		super("No uris found for service "+service);
+		super("No uris found for service " + service);
 	}
 
 	

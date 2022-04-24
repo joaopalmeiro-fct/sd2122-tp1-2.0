@@ -19,7 +19,6 @@ import tp1.util.Debug;
 public class RestFilesServer {
 
 	private static Logger Log = Logger.getLogger(RestFilesServer.class.getName());
-	// private static Discovery discovery = null;
 
 	static {
 		System.setProperty("java.net.preferIPv4Stack", "true");
@@ -47,7 +46,6 @@ public class RestFilesServer {
 
 			Log.info(String.format("%s Server ready @ %s\n", ServiceName.FILES.getServiceName(), serverURI));
 
-			// More code can be executed here...
 		} catch (Exception e) {
 			Log.severe(e.getMessage());
 		}

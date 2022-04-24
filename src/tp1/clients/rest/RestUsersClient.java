@@ -22,11 +22,11 @@ public class RestUsersClient extends RestClient implements UsersClient {
 		super(serverURI);
 		target = client.target(serverURI).path(RestUsers.PATH);
 	}
-	
+
 	public RestUsersClient() {
 		super(null);
 	}
-	
+
 	public void redifineURI(URI serverURI) {
 		this.serverURI = serverURI;
 		target = client.target(serverURI).path(RestUsers.PATH);
@@ -42,7 +42,7 @@ public class RestUsersClient extends RestClient implements UsersClient {
 			return clt_authenticateUser(userId, password);
 		});
 	}
-	
+
 	@Override
 	public Result<Void> checkUserExistence (String userId) {
 		return super.reTry(() -> {
@@ -50,7 +50,7 @@ public class RestUsersClient extends RestClient implements UsersClient {
 		});
 	}
 
-// ------------------------------------------------------------------------------------------------
+	// ---------------------------------------------------------------------------------------------
 
 	private Result<Void> clt_authenticateUser(String userId, String password) {
 
@@ -60,13 +60,13 @@ public class RestUsersClient extends RestClient implements UsersClient {
 				.get();
 
 		int status = r.getStatus();
-		
+
 		if (status == Status.NO_CONTENT.getStatusCode())
 			return Result.ok();
 		else
 			return Result.error(ErrorCode.errorCodeOfStatus(status));
 	}
-	
+
 	private Result<Void> clt_checkUserExistence(String userId) {
 
 		Response r = target.path(EXISTANCE_PATH + userId)
@@ -74,7 +74,7 @@ public class RestUsersClient extends RestClient implements UsersClient {
 				.get();
 
 		int status = r.getStatus();
-		
+
 		if (status == Status.NO_CONTENT.getStatusCode())
 			return Result.ok();
 		else

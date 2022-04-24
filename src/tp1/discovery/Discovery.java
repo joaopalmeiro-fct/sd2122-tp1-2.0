@@ -30,8 +30,6 @@ import tp1.discovery.util.exceptions.NoUrisFoundException;
  * 
  * <p>&lt;service-name-string&gt;&lt;delimiter-char&gt;&lt;service-uri-string&gt;</p>
  */
-
-
 public class Discovery {
 	private static Boolean LOGKNOWN = false;
 	private static Logger Log = Logger.getLogger(Discovery.class.getName());

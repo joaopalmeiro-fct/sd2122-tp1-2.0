@@ -7,7 +7,6 @@ import java.util.Set;
 
 public class ServiceAddress {
 	
-	
 	private final String serviceName;
 	private Map<URI, Address> addresses;
 	
@@ -29,7 +28,6 @@ public class ServiceAddress {
 	
 	public Collection<Address> getAddressesInfo() {
 		return addresses.values();
-		
 	}
 	
 	public String getServiceName() {

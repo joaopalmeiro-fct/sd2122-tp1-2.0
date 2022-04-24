@@ -21,8 +21,6 @@ public class UsersClientFactory {
 
 	public UsersClient getClient(URI uri) throws MalformedURLException {
 
-		//var serverURI = ; // use discovery to find a uri of the Users service;
-
 		if (uri.toString().endsWith("rest")) {
 			restUsersClient.redifineURI(uri);
 			return restUsersClient;

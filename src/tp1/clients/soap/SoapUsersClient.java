@@ -47,7 +47,6 @@ public class SoapUsersClient extends SoapClient implements UsersClient {
 		});
 	}
 	
-	
 	//-------------------------------------------------------------------------------------------
 	
 	private Result<Void> clt_authenticateUser(String userId, String password) {

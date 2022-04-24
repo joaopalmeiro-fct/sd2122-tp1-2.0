@@ -20,16 +20,15 @@ import tp1.discovery.Discovery;
 import tp1.service.util.JavaDirectory;
 
 public class DirectoryResource implements RestDirectory{
-	
+
 	private FilesClientFactory filesClientFactory;
 	final Directory directoryImpl;
 	Discovery discovery;
-	
+
 	public DirectoryResource(Discovery discovery) {
 		this.discovery = discovery;
 		filesClientFactory = new FilesClientFactory();
 		directoryImpl = new JavaDirectory(discovery, filesClientFactory);
-		
 	}
 
 	@Override
@@ -50,7 +49,7 @@ public class DirectoryResource implements RestDirectory{
 			return;
 		else
 			throw new WebApplicationException(Status.fromStatusCode(result.getErrorCodeNum()));
-		
+
 	}
 
 	@Override
@@ -61,7 +60,7 @@ public class DirectoryResource implements RestDirectory{
 			return;
 		else
 			throw new WebApplicationException(Status.fromStatusCode(result.getErrorCodeNum()));
-		
+
 	}
 
 	@Override
@@ -72,29 +71,30 @@ public class DirectoryResource implements RestDirectory{
 			return;
 		else
 			throw new WebApplicationException(Status.fromStatusCode(result.getErrorCodeNum()));
-		
+
 	}
 
 	@Override
-	//TODO - MUDAR ISTO DE FORMA A DAR REDIRECT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!DKJAASLHDALSJDLKASJDKLASJDLKASJDLKASJDLAJDLKASJDLKJL
 	public byte[] getFile(String filename, String userId, String accUserId, String password) {
 		var result = directoryImpl.getFile(filename, userId, accUserId, password);
-		
-		/*
-		 * Nao testado:
-		 */
+
 		if (result.isOK()) {
-			String URIandFileID[] = result.uri().toString().split("/"+tp1.server.util.ServiceName.FILES.getServiceName()+"/");
+			String URIandFileID[] = result.uri()
+					.toString().split("/" + tp1.server.util.ServiceName.FILES.getServiceName() + "/");
 			if (URIandFileID[0].endsWith("rest")) {
 				throw new WebApplicationException(Response.temporaryRedirect(result.uri()).build());
 			}
 			else {
 				URI uri;
-	        	try { uri = new URI(URIandFileID[0]); } catch (URISyntaxException e) {throw new WebApplicationException(e.getMessage());}
-		    	String fileId = URIandFileID[1];
-		    	Result<byte[]> r;
-		    	
-		    	synchronized(filesClientFactory) {
+				try { 
+					uri = new URI(URIandFileID[0]); 
+				} catch (URISyntaxException e) {
+					throw new WebApplicationException(e.getMessage());
+				}
+				String fileId = URIandFileID[1];
+				Result<byte[]> r;
+
+				synchronized(filesClientFactory) {
 					FilesClient client;
 					try {
 						client = filesClientFactory.getClient(uri);
@@ -105,34 +105,18 @@ public class DirectoryResource implements RestDirectory{
 					r = client.getFile(fileId,"");
 					if (!r.isOK())
 						throw new WebApplicationException(Status.fromStatusCode(r.getErrorCodeNum()));
-					 return r.value();
+					return r.value();
 				}
 			}
 		}
 		else
 			throw new WebApplicationException(Status.fromStatusCode(result.getErrorCodeNum()));
-			
-    	
-  
-    	
-    	
-    	
-		
-		
-		
-		
-		//----
-		
-		
-		//FUNCIONAL
-		/*if (result.isOK())
-			throw new WebApplicationException(Response.temporaryRedirect(result.uri()).build());
-		else
-			throw new WebApplicationException(Status.fromStatusCode(result.getErrorCodeNum()));*/
+
 	}
 
 	@Override
 	public List<FileInfo> lsFile(String userId, String password) {
+		
 		var result = directoryImpl.lsFile(userId, password);
 
 		if (result.isOK())
@@ -143,12 +127,13 @@ public class DirectoryResource implements RestDirectory{
 
 	@Override
 	public void deleteAllFiles(String userId, String password) {
+		
 		var result = directoryImpl.deleteAllFiles(userId, password);
+		
 		if (result.isOK())
 			return;
 		else
 			throw new WebApplicationException(Status.fromStatusCode(result.getErrorCodeNum()));
-		
 	}
 
 }

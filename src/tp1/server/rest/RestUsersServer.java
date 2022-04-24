@@ -46,7 +46,6 @@ public class RestUsersServer {
 
 			Log.info(String.format("%s Server ready @ %s\n", ServiceName.USERS.getServiceName(), serverURI));
 
-			// More code can be executed here...
 		} catch (Exception e) {
 			Log.severe(e.getMessage());
 		}

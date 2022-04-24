@@ -31,8 +31,6 @@ public class RestFilesClient extends RestClient implements FilesClient {
 		target = client.target(serverURI).path(RestFiles.PATH);
 	}
 
-	// private static Logger Log = Logger.getLogger(FilesClient.class.getName());
-
 	static {
 		System.setProperty("java.net.preferIPv4Stack", "true");
 	}

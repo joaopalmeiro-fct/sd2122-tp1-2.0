@@ -12,15 +12,11 @@ import tp1.service.util.JavaFiles;
 public class FilesResource implements RestFiles {
 	
 	Discovery discovery;
-
 	Files filesImpl;
 
 	public FilesResource (Discovery discovery) {
-
 		this.filesImpl = new JavaFiles(discovery);
-
 		this.discovery = discovery;
-
 	}
 
 	@Override
@@ -32,7 +28,6 @@ public class FilesResource implements RestFiles {
 			return;
 		else
 			throw new WebApplicationException(Status.fromStatusCode(result.getErrorCodeNum()));
-		
 	}
 
 	@Override
@@ -44,7 +39,6 @@ public class FilesResource implements RestFiles {
 			return;
 		else
 			throw new WebApplicationException(Status.fromStatusCode(result.getErrorCodeNum()));
-		
 	}
 
 	@Override

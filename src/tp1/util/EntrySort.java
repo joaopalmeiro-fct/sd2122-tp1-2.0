@@ -6,8 +6,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-
-
 public class EntrySort<K,V> implements Map.Entry<K, V>, Comparable<EntrySort<K,V>> {
 
 	V value;
@@ -40,19 +38,21 @@ public class EntrySort<K,V> implements Map.Entry<K, V>, Comparable<EntrySort<K,V
 	}
 	
 	public static <K,V> List<EntrySort<K,V>> toEntrySort (Collection<Map.Entry<K, V>> set) {
+		
 		List<EntrySort<K,V>> retSet = new ArrayList<>(set.size());
+		
 		for (Map.Entry<K,V> entry : set) {
 			retSet.add(new EntrySort<K,V>(entry.getKey(),entry.getValue()));
 		}
+		
 		retSet.sort(new Comparator<EntrySort<K,V>>() {
-
 			@Override
 			public int compare(EntrySort<K, V> o1, EntrySort<K, V> o2) {
 				return o1.compareTo(o2);
 			}
 		});
-		return retSet;
 		
+		return retSet;
 		
 	}
 

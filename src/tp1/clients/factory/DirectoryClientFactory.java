@@ -23,8 +23,6 @@ public class DirectoryClientFactory {
 
 	public DirectoryClient getClient(URI uri) throws MalformedURLException {
 
-		//var serverURI = ; // use discovery to find a uri of the Users service;
-
 		if (uri.toString().endsWith("rest")) {
 			restDirectoryClient.redifineURI(uri);
 			return restDirectoryClient;

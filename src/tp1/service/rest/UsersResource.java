@@ -20,15 +20,13 @@ public class UsersResource implements RestUsers {
 	Users userImpl;
 
 	public UsersResource(Discovery discovery) {
-
 		this.userImpl = new JavaUsers(discovery);
-
 		this.discovery = discovery;
-
 	}
 
 	@Override
 	public String createUser(User user) {
+		
 		var result = userImpl.createUser(user);
 
 		if (result.isOK())
@@ -90,7 +88,6 @@ public class UsersResource implements RestUsers {
 			return;
 		else
 			throw new WebApplicationException(Status.fromStatusCode(result.getErrorCodeNum()));
-
 	}
 
 	@Override
@@ -102,7 +99,6 @@ public class UsersResource implements RestUsers {
 			return;
 		else
 			throw new WebApplicationException(Status.fromStatusCode(result.getErrorCodeNum()));
-
 	}
 
 }

@@ -16,7 +16,6 @@ import tp1.api.service.util.Result.ErrorCode;
 
 public class RestDirectoryClient extends RestClient implements DirectoryClient {
 
-	//private static final String DELETEALL_PATH = "deleteall/";
 	WebTarget target;
 	
 	public RestDirectoryClient(URI serverURI) {
@@ -32,8 +31,6 @@ public class RestDirectoryClient extends RestClient implements DirectoryClient {
 		this.serverURI = serverURI;
 		target = client.target(serverURI).path(RestDirectory.PATH);
 	}
-
-	//private static Logger Log = Logger.getLogger(UsersClient.class.getName());
 
 	static {
 		System.setProperty("java.net.preferIPv4Stack", "true");

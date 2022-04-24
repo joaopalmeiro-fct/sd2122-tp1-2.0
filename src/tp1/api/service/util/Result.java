@@ -52,7 +52,6 @@ public interface Result<T> {
 			
 			}
 		}
-		
 	};
 	
 	
@@ -108,17 +107,20 @@ public interface Result<T> {
 		return new ErrorResult<>(error);		
 	}
 	
+	/**
+	 * Convenience method used to error code number 
+	 * @return
+	 */
 	int getErrorCodeNum();
 	
+	/**
+	 * Convenience method used to return an uri 
+	 * @return
+	 */
 	URI uri();
-	
-	
 	
 }
 
-/*
- * 
- */
 class OkResult<T> implements tp1.api.service.util.Result<T> {
 
 	final URI uri;

@@ -18,19 +18,17 @@ import tp1.server.util.ServiceName;
 import tp1.discovery.*;
 
 public class JavaUsers implements Users {
-	
+
 	Discovery discovery;
 	private final Map<String,User> users;
 	private DirectoryClientFactory directoryClientFactory;
-	//private final DirectoryClient directoryClient;
-	
+
 	public JavaUsers (Discovery discovery) {
 		this.discovery = discovery;
 		users = new HashMap<>();
-		
 		directoryClientFactory = new DirectoryClientFactory();
 	}
-		
+
 	@Override
 	public Result<String> createUser(User user) {
 
@@ -56,7 +54,7 @@ public class JavaUsers implements Users {
 
 	@Override
 	public Result<User> getUser(String userId, String password) {
-		
+
 		if(userId == null) {
 			return Result.error( ErrorCode.BAD_REQUEST );
 		}
@@ -146,7 +144,7 @@ public class JavaUsers implements Users {
 		Collection<User> allUsers;
 
 		synchronized (users) {
-			
+
 			allUsers = users.values();
 
 			for (User user: allUsers) {
@@ -160,13 +158,12 @@ public class JavaUsers implements Users {
 		return Result.ok(retUsers);
 	}
 
-//------------------------------- Util methods (for other services) ---------------------------------
+	//------------------------------ Util methods (for other services) ----------------------------
 
 	@Override
 	public Result<Void> authenticateUser (String userId, String password) {
 
 		// Check if user is valid
-		//if(userId == null || password == null) {
 		if(userId == null) 
 			return Result.error( ErrorCode.BAD_REQUEST );
 
@@ -183,9 +180,9 @@ public class JavaUsers implements Users {
 		//Check if the password is correct
 		if( password == null || !user.getPassword().equals(password))
 			return Result.error( ErrorCode.FORBIDDEN );
-		
+
 		return Result.ok();
-		
+
 	}
 
 	@Override
@@ -202,7 +199,7 @@ public class JavaUsers implements Users {
 
 		if( user == null )
 			return Result.error( ErrorCode.NOT_FOUND );
-		
+
 		return Result.ok();
 
 	}
@@ -217,9 +214,9 @@ public class JavaUsers implements Users {
 		} catch (Exception e) {
 			return Result.error(ErrorCode.INTERNAL_ERROR);
 		}
-		
+
 		Result<Void> r;
-		
+
 		synchronized(directoryClientFactory) {
 			DirectoryClient client;
 			try {
@@ -228,13 +225,13 @@ public class JavaUsers implements Users {
 			catch (MalformedURLException e) {
 				return Result.error(ErrorCode.INTERNAL_ERROR);
 			}
-			//filesClient.redifineURI(uri);
+			
 			r = client.deleteAllFiles(userId,password);
 			if (!r.isOK())
 				return Result.error(r.error());
 			else
 				return Result.ok();
-		
+
 		}
 	}
 

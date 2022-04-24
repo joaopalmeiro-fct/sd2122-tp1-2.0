@@ -1,6 +1,5 @@
 package tp1.api.clients;
 
-
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.function.Supplier;
@@ -13,7 +12,6 @@ import com.sun.xml.ws.client.BindingProviderProperties;
 import jakarta.xml.ws.BindingProvider;
 import jakarta.xml.ws.Service;
 import jakarta.xml.ws.WebServiceException;
-
 
 public class SoapClient {
 

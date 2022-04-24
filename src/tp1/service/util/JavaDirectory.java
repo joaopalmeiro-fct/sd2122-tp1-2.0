@@ -61,7 +61,6 @@ public class JavaDirectory implements Directory {
 	@Override
 	public Result<FileInfo> writeFile(String filename, byte[] data, String userId, String password) {
 
-		
 		if (filename == null || data == null || userId == null)
 			return Result.error( ErrorCode.BAD_REQUEST );
 		
@@ -75,7 +74,6 @@ public class JavaDirectory implements Directory {
 		synchronized (userFiles) {
 
 			try {
-
 				FileInfo file;
 
 				Map<String, FileInfo> userfiles = userFiles.get(userId);
@@ -119,7 +117,6 @@ public class JavaDirectory implements Directory {
 	public Result<Void> deleteFile(String filename, String userId, String password) {
 
 		if (filename == null || userId == null)
-			// Log.info ()... ?
 			return Result.error(ErrorCode.BAD_REQUEST);
 
 		Result<Void> condition = authenticateUser(userId, password);
@@ -188,9 +185,7 @@ public class JavaDirectory implements Directory {
 					sharedFiles.put(fileId, file);
 					return Result.ok();
 				}
-				// newSharedWith.add(userIdShare);
-				// file.setSharedWith(newSharedWith);
-				// files.put(fileId, file);
+
 			} catch (Exception e) {
 				return Result.error(ErrorCode.INTERNAL_ERROR);
 			}
@@ -234,13 +229,11 @@ public class JavaDirectory implements Directory {
 
 	@Override
 	public Result<byte[]> getFile(String filename, String userId, String accUserId, String password) {
-		System.out.println(String.format("VAMOS VER SE E BAD REQUEST\n filename:%s, userId:%s, accUserId:%s",filename,userId,accUserId));
+
 		if (filename == null || userId == null || accUserId == null)
 			return Result.error(ErrorCode.BAD_REQUEST);
 		
 		String fileId = String.format(FILE_ID, userId, filename);
-
-		
 
 		Result<Void> condition = authenticateUser(accUserId, password);
 		if (!condition.isOK()) {
@@ -267,11 +260,9 @@ public class JavaDirectory implements Directory {
 			Set<String> sharedWith = file.getSharedWith();
 
 			if (owner.equals(accUserId) || sharedWith.contains(accUserId))
-				//return Result.ok();
 				return Result.ok(null,URI.create(file.getFileURL()));
 			else
 				return Result.error(ErrorCode.FORBIDDEN);
-
 		}
 
 	}
@@ -309,11 +300,10 @@ public class JavaDirectory implements Directory {
 				}
 			}
 		}
-		// Collections.sort(ls);
 		return Result.ok(ls);
 	}
 
-	// ---------------------------------------------------------------------------------------------
+	// --------------------------------------------------------------------------------------------
 
 	@Override
 	public Result<Void> deleteAllFiles(String userId, String password) {
@@ -355,19 +345,16 @@ public class JavaDirectory implements Directory {
 				}
 			}
 		}
+		
 		return Result.ok();
-
-
-
 	}
 
 	// --------------------------------------- Util methods ---------------------------------------
 
-	private Result<Void> checkShareConditions(String userId, String filename, String userIdShare, String password,
-			String fileId) {
+	private Result<Void> checkShareConditions(String userId, String filename, String userIdShare,
+			String password, String fileId) {
 
 		if (filename == null || userId == null || userIdShare == null)
-			// Log.info ()... ?
 			return Result.error(ErrorCode.BAD_REQUEST);
 
 		Result<Void> condition = authenticateUser(userId, password);
@@ -378,31 +365,25 @@ public class JavaDirectory implements Directory {
 		if (!condition.isOK())
 			return condition;
 
-	
-
 		synchronized (userFiles) {
 
 			Map<String, FileInfo> userfiles = userFiles.get(userId);
-
 			if (userfiles == null) {
 				return Result.error(ErrorCode.NOT_FOUND);
 			}
 
 			FileInfo file = userfiles.get(fileId);
-
 			if (file == null) {
 				return Result.error(ErrorCode.NOT_FOUND);
 			}
-
+			
 			String owner = file.getOwner();
-
 			if (!owner.equals(userId))
 				return Result.error(ErrorCode.FORBIDDEN);
 
 		}
 		
 		return Result.ok();
-
 	}
 
 	// -------------------------------Communication between servers--------------------------------
@@ -433,12 +414,11 @@ public class JavaDirectory implements Directory {
 			
 			result = client.authenticateUser(userId, password);
 		}
-		if (result.isOK()) {
+		
+		if (result.isOK())
 			return Result.ok();
-		} else {	
-			
+		else 
 			return Result.error(result.error());
-		}
 
 	}
 
@@ -451,8 +431,11 @@ public class JavaDirectory implements Directory {
 		} catch (Exception e) {
 			return Result.error(ErrorCode.INTERNAL_ERROR);
 		}
+		
 		Result<Void> result;
+		
 		synchronized(usersClientFactory) {
+			
 			UsersClient client;
 			try {
 				client = usersClientFactory.getClient(uri);
@@ -461,11 +444,12 @@ public class JavaDirectory implements Directory {
 				return Result.error(ErrorCode.INTERNAL_ERROR);
 			}
 			result = client.checkUserExistence(userId);
+			
 		}
 
-		if (result.isOK()) {
+		if (result.isOK())
 			return Result.ok();
-		} else
+		else
 			return Result.error(result.error());
 
 	}
@@ -479,13 +463,16 @@ public class JavaDirectory implements Directory {
 			return Result.error(r.error());
 
 		URI uri = null;
+		
 		synchronized (fileDistribution) {
 			List<EntrySort<URI, Integer>> sortedList = EntrySort.toEntrySort(fileDistribution.entrySet());
 
 			for (int i = 0; i < sortedList.size(); i++) {
 				uri = sortedList.get(i).getKey();
 				Result<Void> result;
+				
 				synchronized(filesClientFactory) {
+					
 					FilesClient client;
 					try {
 						client = filesClientFactory.getClient(uri);
@@ -493,11 +480,13 @@ public class JavaDirectory implements Directory {
 					catch (MalformedURLException e) {
 						return Result.error(ErrorCode.INTERNAL_ERROR);
 					}
-					//filesClient.redifineURI(uri);
 					result = client.writeFile(fileId, data, "");
+					
 				}
+				
 				if (result == null)
 					continue;
+				
 				if (result.isOK()) {
 					int count = fileDistribution.get(uri);
 					count++;
@@ -509,11 +498,14 @@ public class JavaDirectory implements Directory {
 					return Result.error(result.error());
 			}
 		}
+		
 		return Result.error(ErrorCode.INTERNAL_ERROR);
 	}
 
 	private Result<Void> updateFileDiscovered() {
+		
 		synchronized (fileDistribution) {
+			
 			if ((rediscovery_counter % FILE_REDISCOVERY) == 0) {
 				try {
 					URI[] uris = discovery.knownUrisOf(ServiceName.FILES.getServiceName());
@@ -523,19 +515,18 @@ public class JavaDirectory implements Directory {
 				} catch (NoUrisFoundException e) {
 					return Result.error(ErrorCode.INTERNAL_ERROR);
 				}
-
 			}
+			
 		}
+		
 		return Result.ok();
 	}
 
 	private Result<Void> deleteFromFiles(String fileId, URI uri) {
 
 		try {
-			// URI uri;
-
-			// uri = discovery.findURI(FilesServer.SERVICE);
 			synchronized(filesClientFactory) {
+				
 				FilesClient client;
 				try {
 					client = filesClientFactory.getClient(uri);
@@ -543,28 +534,32 @@ public class JavaDirectory implements Directory {
 				catch (MalformedURLException e) {
 					return Result.error(ErrorCode.INTERNAL_ERROR);
 				}
-				//filesClient.redifineURI(uri);
+				
 				Result<Void> r = client.deleteFile(fileId, "");
 				if (!r.isOK())
 					return Result.error(r.error());
 			}
+			
 			synchronized (fileDistribution) {
+				
 				int count = fileDistribution.get(uri);
 				count--;
 				fileDistribution.replace(uri, count);
-
 				rediscovery_counter--;
+				
 			}
+			
 			return Result.ok();
-
-
+			
 		} catch (Exception e) {
 			return Result.error(ErrorCode.INTERNAL_ERROR);
 		}
 	}
 
 	private Result<Void> deleteAllFromFiles(String userId) {
+		
 		synchronized (fileDistribution) {
+			
 			for (URI uri : fileDistribution.keySet()) {
 				try {
 
@@ -577,9 +572,7 @@ public class JavaDirectory implements Directory {
 						catch (MalformedURLException e) {
 							return Result.error(ErrorCode.INTERNAL_ERROR);
 						}
-						
-						
-						//filesClient.redifineURI(uri);
+
 						r = client.deleteAllFilesF(userId,"");
 						if (!r.isOK())
 							return Result.error(r.error());
@@ -588,15 +581,16 @@ public class JavaDirectory implements Directory {
 						Integer deleted = r.value();
 						int prev_count = fileDistribution.get(uri);
 						fileDistribution.replace(uri, prev_count - deleted);
-
 					}
+					
 				} catch (Exception e) {
 					return Result.error(ErrorCode.INTERNAL_ERROR);
 				}
 			}
+			
 		}
+		
 		return Result.ok();
 	}
-
 
 }

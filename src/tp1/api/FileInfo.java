@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * Represents a File in the system
  */
-public class FileInfo /*implements Comparable<FileInfo>*/{
+public class FileInfo {
 	/**
 	 * userId of the owner
 	 */
@@ -104,13 +104,6 @@ public class FileInfo /*implements Comparable<FileInfo>*/{
 		return "FileInfo [owner=" + owner + ", filename=" + filename + ", fileURL=" + fileURL + ", sharedWith="
 				+ sharedWith + "]";
 	}
-	
-
-	/*@Override
-	public int compareTo(FileInfo o) {
-		return getFilename().compareTo(o.getFilename());
-	}*/
-	
 	
 }
 
