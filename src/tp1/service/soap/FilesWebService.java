@@ -56,4 +56,16 @@ public class FilesWebService implements SoapFiles {
 		
 	}
 
+	@Override
+	public Integer deleteAllFiles(String userId, String token) throws FilesException {
+		
+		var result = filesImpl.deleteAllFiles(userId, token);
+		
+        if( result.isOK() )
+            return result.value();
+        else
+            throw new FilesException(result.error().toString()) ;
+		
+	}
+
 }

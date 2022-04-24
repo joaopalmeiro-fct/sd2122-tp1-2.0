@@ -92,8 +92,20 @@ public class DirectoryWebService implements SoapDirectory {
         if( result.isOK() )
             return result.value();
         else
-            throw new DirectoryException(result.error().toString()) ;
+            throw new DirectoryException(result.error().toString());
         
+	}
+
+	@Override
+	public void deleteAllFiles(String userId, String password) throws DirectoryException {
+		
+		var result = directoryImpl.lsFile(userId, password);
+		
+        if( result.isOK() )
+            return;
+        else
+            throw new DirectoryException(result.error().toString());
+		
 	}
 
 }

@@ -134,7 +134,6 @@ public class JavaFiles implements Files {
 				}
 			}
 			
-			
 			for (String id : filesToDelete) {
 				fileData.remove(id);
 				count++;

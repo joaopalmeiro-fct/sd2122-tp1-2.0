@@ -4,6 +4,10 @@ import java.util.List;
 
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebService;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.QueryParam;
 import tp1.api.FileInfo;
 
 @WebService(serviceName=SoapDirectory.NAME, targetNamespace=SoapDirectory.NAMESPACE, endpointInterface=SoapDirectory.INTERFACE)
@@ -31,4 +35,13 @@ public interface SoapDirectory {
 
 	@WebMethod
 	List<FileInfo> lsFile(String userId, String password) throws DirectoryException;
+	
+	/**
+	 * Deletes all files of the given user, removes it from any sharings and deletes all info associated with it.
+	 * @param userId - id of the user.
+	 * @param password - the password of the user.
+	 * @throws DirectoryException otherwise
+	 */
+	@WebMethod
+	void deleteAllFiles(String userId, String password) throws DirectoryException;
 }

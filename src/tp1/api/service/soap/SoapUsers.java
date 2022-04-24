@@ -4,6 +4,10 @@ import java.util.List;
 
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebService;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.QueryParam;
 import tp1.api.User;
 
 @WebService(serviceName=SoapUsers.NAME, targetNamespace=SoapUsers.NAMESPACE, endpointInterface=SoapUsers.INTERFACE)
@@ -54,4 +58,23 @@ public interface SoapUsers {
 	 */
 	@WebMethod
 	List<User> searchUsers(String pattern) throws UsersException;	
+	
+	/**
+	 * Authenticates the user with the given id.
+	 * 
+	 * @param userId the userId of the user
+	 * @param password password of the user
+	 * @throws UsersException otherwise
+	 */
+	@WebMethod
+	void authenticateUser(String userId, String password) throws UsersException;
+	
+	/**
+	 * Check the existence of the user with the given id.
+	 * 
+	 * @param userId the userId of the user
+	 * @throws UsersException otherwise
+	 */
+	@WebMethod
+	void checkUserExistence(String userId) throws UsersException;
 }

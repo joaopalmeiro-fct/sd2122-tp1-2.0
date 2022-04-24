@@ -78,4 +78,28 @@ public class UsersWebService implements SoapUsers {
             throw new UsersException(result.error().toString()) ;
 	}
 
+	@Override
+	public void authenticateUser(String userId, String password) throws UsersException {
+		
+		var result = userImpl.authenticateUser(userId, password);
+		
+        if( result.isOK() )
+            return;
+        else
+            throw new UsersException(result.error().toString());
+		
+	}
+
+	@Override
+	public void checkUserExistence(String userId) throws UsersException {
+
+		var result = userImpl.checkUserExistence(userId);
+		
+        if( result.isOK() )
+            return;
+        else
+            throw new UsersException(result.error().toString());
+		
+	}
+
 }

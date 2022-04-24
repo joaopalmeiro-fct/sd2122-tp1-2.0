@@ -2,6 +2,13 @@ package tp1.api.service.soap;
 
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebService;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
 
 @WebService(serviceName=SoapFiles.NAME, targetNamespace=SoapFiles.NAMESPACE, endpointInterface=SoapFiles.INTERFACE)
 public interface SoapFiles {
@@ -18,4 +25,12 @@ public interface SoapFiles {
 	
 	@WebMethod
 	void writeFile(String fileId, byte[] data, String token) throws FilesException;	
+	
+	/**
+	 * Delete all existing files from given user.
+	 * @param userId - unique id of the user whose files will be deleted. 
+	 * @throws FilesException otherwise
+	 */
+	@WebMethod
+	Integer deleteAllFiles(String userId, String token) throws FilesException;
 }
